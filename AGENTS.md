@@ -67,7 +67,7 @@ npm run pipeline
 
 1. **Shopify Theme Store URL to scrape:** `https://themes.shopify.com`  
    - Sort by price descending to find the most expensive themes.
-   - Target themes with a one-time purchase price (not free). Aim for the top 5 paid themes by price.
+   - Target themes with a one-time purchase price (not free). Aim for the top 10 paid themes by price.
    - Extract from each theme's detail page: name, price, preview URL, primary colors (from CSS or screenshots), fonts (Google Fonts or system fonts listed), layout sections (hero, feature grid, testimonials, etc.), and any notable UI patterns.
 
 2. **design-analysis.json schema** — each entry must have:
@@ -109,7 +109,7 @@ npm run pipeline
    - Modify `AGENTS.md` or `design-analysis.json` once Goal 1 is complete
    - Use any CSS framework (no Tailwind, no Bootstrap) — write custom CSS
    - Add any backend, server, or build step — pure static files only
-   - Create more than 5 site directories (one per theme in the top 5)
+   - Create more than 10 site directories (one per theme in the top 10)
    - Copy Shopify's actual theme code (legal risk) — INSPIRE and abstract, do not copy
 
 5. **BLOCKED protocol:**  
@@ -123,12 +123,12 @@ npm run pipeline
 
 ### Goal 1 — `npm run verify-recon` must pass
 - `design-analysis.json` exists at repo root
-- It contains exactly 5 theme objects
+- It contains exactly 10 theme objects
 - Every object has all required fields from the schema above
 - All `price` values are numbers > 0
 
 ### Goal 2 — `npm run verify` must pass
-- `sites/` directory exists and contains exactly 5 subdirectories
+- `sites/` directory exists and contains exactly 10 subdirectories
 - Each subdirectory has `index.html`, `style.css`, and `main.js`
 - Each `index.html` passes a structural check: has DOCTYPE, `<html lang>`, `<meta viewport>`, at least one `<h1>`, at least one `<section>`
 - No site file is under 5KB (a file that small is a skeleton, not a finished page)
@@ -138,4 +138,4 @@ npm run pipeline
 ## What Codex must deliver as PRs
 
 - **Goal 1 PR:** adds `scripts/scrape.js`, `scripts/verify-recon.js`, updates `package.json` scripts, and adds `design-analysis.json`
-- **Goal 2 PR:** adds `scripts/build.js`, `scripts/verify.js`, and the full `sites/` directory with all 5 complete sites
+- **Goal 2 PR:** adds `scripts/build.js`, `scripts/verify.js`, and the full `sites/` directory with all 10 complete sites

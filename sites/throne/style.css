@@ -1,17 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Shopify+Sans+Medium:wght@300;400;500;600;700;800&family=Times:wght@300;400;500;600;700;800&display=swap');
 
 :root {
   --color-primary: #000000;
-  --color-secondary: #ffffff;
-  --color-accent: #ff2828;
-  --color-text: #2e2e2e;
-  --color-bg: #edeff2;
-  --font-heading: "Roboto Condensed", serif;
-  --font-body: "Roboto", sans-serif;
-  --base-size: calc(1.0 * 16px);
+  --color-secondary: #f4f4f4;
+  --color-accent: #0000ee;
+  --color-text: #ffffff;
+  --color-bg: #000000;
+  --font-heading: "Shopify Sans Medium", serif;
+  --font-body: "Times", sans-serif;
+  --base-size: 16px;
   --heading-weight: 700;
-  --surface: #ffffff;
-  --surface-muted: #f7f6f2;
+  --surface: #111111;
+  --surface-muted: #171717;
   --on-primary: #ffffff;
   --on-accent: #ffffff;
   --line: color-mix(in srgb, var(--color-text), transparent 78%);
@@ -449,7 +449,7 @@ h3 {
   display: grid;
   gap: 2rem;
   background: var(--color-secondary);
-  color: var(--color-text);
+  color: #111111;
 }
 
 .story__image {

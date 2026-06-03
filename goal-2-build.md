@@ -3,11 +3,11 @@
 ## Prerequisite
 
 **Goal 1's PR must already be merged before you run this.** `design-analysis.json` must exist at
-the repo root with 5 complete theme objects. If it doesn't exist, stop immediately and report BLOCKED.
+the repo root with 10 complete theme objects. If it doesn't exist, stop immediately and report BLOCKED.
 
 ## Objective
 
-Read `design-analysis.json` and build 5 complete, visually polished static websites — one per theme —
+Read `design-analysis.json` and build 10 complete, visually polished static websites — one per theme —
 inside the `sites/` directory. Each site must faithfully reproduce the mood, color palette,
 typography, and layout sections of its source theme. The result should look like a real Shopify
 theme demo page — not a mockup, not a skeleton.
@@ -15,7 +15,7 @@ theme demo page — not a mockup, not a skeleton.
 ## What to read first
 
 - `AGENTS.md` — quality bar, constraints, verify gate, what NOT to do
-- `design-analysis.json` — your design source of truth for all 5 sites
+- `design-analysis.json` — your design source of truth for all 10 sites
 
 ## Steps Codex must take
 
@@ -24,7 +24,7 @@ theme demo page — not a mockup, not a skeleton.
 Create `scripts/build.js`. It must:
 
 1. Read and parse `design-analysis.json`
-2. For each of the 5 theme entries, create a directory `sites/[slug]/` where `[slug]` is the
+2. For each of the 10 theme entries, create a directory `sites/[slug]/` where `[slug]` is the
    theme name lowercased with spaces replaced by hyphens (e.g. "Prestige" → `sites/prestige/`)
 3. Generate `index.html`, `style.css`, and `main.js` for each theme
 4. Print build status to stdout as each site completes
@@ -102,14 +102,14 @@ Implement the `ui_patterns` from the theme's JSON. Minimum implementations:
 
 Create `scripts/verify.js`. It must:
 
-1. Read the `sites/` directory and assert exactly 5 subdirectories exist
+1. Read the `sites/` directory and assert exactly 10 subdirectories exist
 2. For each subdirectory, assert:
    - `index.html` exists and is ≥ 5KB
    - `style.css` exists and is ≥ 5KB
    - `main.js` exists and is ≥ 1KB
    - `index.html` contains: `<!DOCTYPE html`, `lang=`, `viewport`, at least one `<h1>`, at
      least one `<section>`, a `<footer>`
-3. Print "✅ Build verified: 5 sites, all files present and sized correctly" on success
+3. Print "✅ Build verified: 10 sites, all files present and sized correctly" on success
 4. Exit with code 1 and clear error detail on failure
 
 ### Step 4 — Run and validate
@@ -146,5 +146,5 @@ If `design-analysis.json` does not exist or has fewer than 5 entries:
 
 - `scripts/build.js`
 - `scripts/verify.js`
-- `sites/[theme-1]/` through `sites/[theme-5]/` — each with `index.html`, `style.css`, `main.js`
+- `sites/[theme-1]/` through `sites/[theme-10]/` — each with `index.html`, `style.css`, `main.js`
 - `npm run verify` passes (exit code 0)

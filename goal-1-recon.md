@@ -22,8 +22,8 @@ Create `scripts/scrape.js`. It must:
 3. Find the price filter or sort control. As of mid-2026 the Theme Store has a sort-by-price
    option — find and activate "Price: High to Low" or equivalent. If the UI has changed,
    fall back to scraping all paid themes and sorting by price in code.
-4. Collect the top 5 results by price (skip free themes, price = 0)
-5. For each of the 5 themes, visit its detail page and extract:
+4. Collect the top 10 results by price (skip free themes, price = 0)
+5. For each of the 10 themes, visit its detail page and extract:
    - Theme name and price
    - Shopify theme URL (current page URL)
    - Preview/demo URL (the "View demo" link)
@@ -51,11 +51,11 @@ Create `scripts/scrape.js`. It must:
 Create `scripts/verify-recon.js`. It must:
 
 1. Read `design-analysis.json`
-2. Assert exactly 5 entries
+2. Assert exactly 10 entries
 3. Assert every entry has: rank, name, price (> 0), shopify_url, colors (with primary, secondary,
    accent, text, background), typography (heading_font, body_font), layout_sections (array,
    at least 2 items), ui_patterns (array), mood (non-empty string)
-4. Print "✅ Recon verified: 5 themes, all fields present" on success
+4. Print "✅ Recon verified: 10 themes, all fields present" on success
 5. Exit with code 1 and a clear error message on failure
 
 ### Step 3 — Update package.json
@@ -112,5 +112,5 @@ the page after 3 attempts:
 - `scripts/scrape.js`
 - `scripts/verify-recon.js`
 - `package.json` (updated with scripts + playwright dependency)
-- `design-analysis.json` (5 theme objects, all fields populated)
+- `design-analysis.json` (10 theme objects, all fields populated)
 - `npm run verify-recon` passes in CI

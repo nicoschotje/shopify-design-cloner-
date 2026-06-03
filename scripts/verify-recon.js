@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const analysisPath = path.resolve('design-analysis.json');
+const EXPECTED_THEME_COUNT = Number(process.env.THEME_COUNT || 10);
 
 function fail(message) {
   console.error(`Recon verify failed: ${message}`);
@@ -23,8 +24,8 @@ if (!Array.isArray(themes)) {
   fail('design-analysis.json must contain an array');
 }
 
-if (themes.length !== 5) {
-  fail(`expected exactly 5 theme entries, found ${themes.length}`);
+if (themes.length !== EXPECTED_THEME_COUNT) {
+  fail(`expected exactly ${EXPECTED_THEME_COUNT} theme entries, found ${themes.length}`);
 }
 
 const requiredColorKeys = ['primary', 'secondary', 'accent', 'text', 'background'];
@@ -83,4 +84,4 @@ themes.forEach((theme, index) => {
   }
 });
 
-console.log('✅ Recon verified: 5 themes, all fields present');
+console.log(`✅ Recon verified: ${EXPECTED_THEME_COUNT} themes, all fields present`);

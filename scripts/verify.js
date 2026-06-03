@@ -3,6 +3,7 @@ import path from 'node:path';
 
 const sitesPath = path.resolve('sites');
 const requiredFiles = ['index.html', 'style.css', 'main.js'];
+const EXPECTED_SITE_COUNT = Number(process.env.THEME_COUNT || 10);
 
 function fail(message) {
   console.error(`Build verify failed: ${message}`);
@@ -23,8 +24,8 @@ const siteDirs = fs
   .map((entry) => entry.name)
   .sort();
 
-if (siteDirs.length !== 5) {
-  fail(`expected exactly 5 site directories, found ${siteDirs.length}`);
+if (siteDirs.length !== EXPECTED_SITE_COUNT) {
+  fail(`expected exactly ${EXPECTED_SITE_COUNT} site directories, found ${siteDirs.length}`);
 }
 
 for (const dirName of siteDirs) {
@@ -79,4 +80,4 @@ for (const dirName of siteDirs) {
   }
 }
 
-console.log('✅ Build verified: 5 sites, all files present and sized correctly');
+console.log(`✅ Build verified: ${EXPECTED_SITE_COUNT} sites, all files present and sized correctly`);

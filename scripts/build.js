@@ -3,6 +3,7 @@ import path from 'node:path';
 
 const analysisPath = path.resolve('design-analysis.json');
 const sitesPath = path.resolve('sites');
+const EXPECTED_THEME_COUNT = Number(process.env.THEME_COUNT || 10);
 
 function slugify(value) {
   return value
@@ -39,6 +40,14 @@ function luminance(hex) {
 
 function textOn(hex) {
   return luminance(hex) > 0.48 ? '#111111' : '#ffffff';
+}
+
+function hashString(value) {
+  return [...String(value)].reduce((hash, char) => (hash * 31 + char.charCodeAt(0)) >>> 0, 2166136261);
+}
+
+function pick(list, seed, offset = 0) {
+  return list[(seed + offset) % list.length];
 }
 
 function fontImport(theme) {
@@ -286,12 +295,208 @@ const profiles = {
   },
 };
 
+const dynamicImageSets = [
+  {
+    hero: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=900&q=80',
+      'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=900&q=80',
+      'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1538688423619-a81d3f23454b?w=900&q=80',
+      'https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=900&q=80',
+      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&q=80',
+    ],
+  },
+  {
+    hero: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1556906781-9a412961c28c?w=900&q=80',
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=80',
+      'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=80',
+      'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=900&q=80',
+      'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=900&q=80',
+    ],
+  },
+  {
+    hero: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=900&q=80',
+      'https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=80',
+      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=900&q=80',
+      'https://images.unsplash.com/photo-1587302912306-cf1ed9c33146?w=900&q=80',
+      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&q=80',
+    ],
+  },
+  {
+    hero: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1618220179428-22790b461013?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=900&q=80',
+      'https://images.unsplash.com/photo-1602872030490-4a484a7b3ba6?w=900&q=80',
+      'https://images.unsplash.com/photo-1600607688969-a5bfcd646154?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1602872030490-4a484a7b3ba6?w=900&q=80',
+      'https://images.unsplash.com/photo-1618220179428-22790b461013?w=900&q=80',
+      'https://images.unsplash.com/photo-1538688423619-a81d3f23454b?w=900&q=80',
+    ],
+  },
+];
+
+const moodProfiles = {
+  technical: {
+    nouns: ['Systems', 'Control', 'Hardware', 'Signals'],
+    products: [
+      ['Command Console', '$268', 'A modular control surface built for precise daily operations.'],
+      ['Signal Dock', '$194', 'A compact hub that keeps devices charged, visible, and ready.'],
+      ['Pulse Speaker', '$236', 'Clear, directional audio with a clean industrial profile.'],
+    ],
+    headline: 'A sharper command center for modern operators.',
+    subhead: 'This storefront turns complex equipment into a polished buying path with hard contrast, clear specs, and fast merchandising.',
+  },
+  fashion: {
+    nouns: ['Drops', 'Footwear', 'Layers', 'Stories'],
+    products: [
+      ['Release Runner', '$218', 'A sculpted trainer with layered mesh and runway-level stance.'],
+      ['Studio Shell', '$176', 'A cropped technical layer built for movement and sharp silhouettes.'],
+      ['Utility Sling', '$98', 'A compact carry piece with drop-day attitude and daily function.'],
+    ],
+    headline: 'Drop energy with editorial control.',
+    subhead: 'High-contrast cards, kinetic sections, and direct product actions make limited releases feel urgent and premium.',
+  },
+  organic: {
+    nouns: ['New', 'Materials', 'Objects', 'Journal'],
+    products: [
+      ['Washed Field Set', '$164', 'Soft natural layers with an easy, sun-warmed texture.'],
+      ['Harvest Tote', '$88', 'A structured market bag made for weekend rituals.'],
+      ['Garden Wrap', '$126', 'A light seasonal layer for slow mornings and late dinners.'],
+    ],
+    headline: 'A warmer store for tactile everyday goods.',
+    subhead: 'Natural images, calm spacing, and soft merchandising invite shoppers to linger without losing the path to purchase.',
+  },
+  luxury: {
+    nouns: ['Objects', 'Rooms', 'Atelier', 'Concierge'],
+    products: [
+      ['Stone Table Lamp', '$420', 'A composed lighting piece with a quiet architectural profile.'],
+      ['Woven Throw', '$295', 'A refined textile with soft weight and subtle surface variation.'],
+      ['Bronze Tray', '$188', 'A considered valet object with a patinated finish.'],
+    ],
+    headline: 'Quiet commerce for considered purchases.',
+    subhead: 'Elegant pacing, refined type, and calm product stories make premium goods feel collected rather than crowded.',
+  },
+  playful: {
+    nouns: ['Drops', 'Objects', 'Studio', 'Archive'],
+    products: [
+      ['Stack Vessel', '$132', 'A sculptural object with bold color and gallery-like presence.'],
+      ['Loop Lamp', '$188', 'A small lamp with a graphic base and warm diffusion.'],
+      ['Color Tray', '$76', 'A lacquered catchall sized for tables, shelves, and gifting.'],
+    ],
+    headline: 'Turn the catalog into a small exhibition.',
+    subhead: 'Bright visual rhythm, compact product cards, and animated discovery make playful goods feel collectible.',
+  },
+  culinary: {
+    nouns: ['Pantry', 'Table', 'Tools', 'Recipes'],
+    products: [
+      ['Copper Pour Kettle', '$148', 'A warm-toned kettle shaped for daily ritual and display.'],
+      ['Stoneware Service Set', '$126', 'Stackable table pieces with a quiet restaurant-grade finish.'],
+      ['Oak Prep Board', '$84', 'A generous board for prep, serving, and open-shelf styling.'],
+    ],
+    headline: 'A warmer table story for food-led commerce.',
+    subhead: 'Editorial food imagery, practical product cards, and smooth collection paths make culinary goods feel useful and giftable.',
+  },
+  beauty: {
+    nouns: ['Rituals', 'Skin', 'Sets', 'Journal'],
+    products: [
+      ['Renewal Serum', '$118', 'A refined daily formula framed with clear benefits and calm detail.'],
+      ['Barrier Cream', '$86', 'A rich moisturizer designed for premium ritual-driven merchandising.'],
+      ['Travel Ritual Set', '$142', 'A curated kit for gifting, discovery, and replenishment flows.'],
+    ],
+    headline: 'A refined ritual path for modern beauty buyers.',
+    subhead: 'Soft contrast, benefit-led cards, and editorial education make skincare feel premium without slowing checkout.',
+  },
+  pet: {
+    nouns: ['Pets', 'Walk', 'Care', 'Bundles'],
+    products: [
+      ['Cloud Walk Harness', '$72', 'A comfortable everyday harness with soft structure and polished hardware.'],
+      ['Market Treat Tin', '$34', 'A refillable tin for training treats, travel days, and gift bundles.'],
+      ['Rest Nest Bed', '$128', 'A washable pet bed with rounded form and home-friendly materials.'],
+    ],
+    headline: 'A playful premium store for pets and their people.',
+    subhead: 'Friendly copy, clear bundles, and retail-ready product modules make pet commerce feel polished and approachable.',
+  },
+};
+
+function moodKey(theme) {
+  const mood = String(theme.mood || '').toLowerCase();
+  const name = String(theme.name || '').toLowerCase();
+  if (/poochy|pawmart/.test(name) || /pet/.test(mood)) return 'pet';
+  if (/reinvent/.test(name) || /beauty/.test(mood)) return 'beauty';
+  if (/kettle/.test(name) || /culinary|food|table/.test(mood)) return 'culinary';
+  if (/dune/.test(name)) return 'fashion';
+  if (/technical|conversion|electronics|hardware/.test(mood)) return 'technical';
+  if (/fashion|street|bold/.test(mood)) return 'fashion';
+  if (/organic|warm|lifestyle/.test(mood)) return 'organic';
+  if (/playful|creative|image/.test(mood)) return 'playful';
+  return 'luxury';
+}
+
+function dynamicProfile(theme) {
+  const seed = hashString(theme.name);
+  const template = moodProfiles[moodKey(theme)];
+  const brandSuffixes = ['Studio', 'Atelier', 'Supply', 'Works', 'House'];
+  const brand = `${theme.name} ${pick(brandSuffixes, seed)}`;
+  const collectionPrefix = pick(['Core', 'Reserve', 'Seasonal', 'Signature', 'Private'], seed, 1);
+
+  return {
+    brand,
+    eyebrow: `${theme.mood} storefront concept`,
+    headline: template.headline,
+    subhead: template.subhead,
+    cta: `Shop ${theme.name}`,
+    announcement: `${theme.name} premium edit is live: curated sections, polished interactions, and responsive launch pages.`,
+    nav: template.nouns,
+    products: template.products.map(([name, price, copy], index) => [`${theme.name} ${name}`, price, copy]),
+    collections: [
+      `${collectionPrefix} edit`,
+      `${theme.name} essentials`,
+      pick(template.nouns, seed, 2),
+      `${pick(['Launch', 'Client', 'Editorial', 'Material'], seed, 3)} story`,
+    ],
+    features: [
+      ['Design-token driven', 'Colors, type, spacing, and mood are mapped from the scraped analysis instead of hard-coded to one theme.'],
+      ['Premium static build', 'The page opens as standalone HTML, CSS, and JavaScript with no framework or backend dependency.'],
+      ['Responsive commerce', 'Sticky navigation, product cards, collection rails, and newsletter flows are tuned for mobile and desktop.'],
+      ['Interaction-ready', 'Hover zoom, quick view, parallax, swatches, and promo UI are implemented without copying Shopify code.'],
+    ],
+    testimonials: [
+      ['Avery M.', `The ${theme.name} concept feels premium while staying easy to shop.`],
+      ['North Studio', 'The sections have the polish of a demo store without feeling like a skeleton.'],
+      ['M. Laurent', 'Product discovery, editorial pacing, and checkout intent finally sit together.'],
+    ],
+    storyTitle: `${theme.name} translated into an original storefront`,
+    story: `This generated site interprets ${theme.name}'s scraped palette, typography, section list, and UI patterns into an original static storefront. It keeps the premium mood while using fresh copy, imagery, and code.`,
+    newsletter: `Join the ${theme.name} edit`,
+    footerNote: `Static ecommerce concept inspired by ${theme.name}'s public design signals.`,
+  };
+}
+
 function getProfile(theme) {
-  return profiles[theme.name] || profiles.Mayfair;
+  return profiles[theme.name] || dynamicProfile(theme);
 }
 
 function getImages(theme) {
-  return imageSets[theme.name] || imageSets.Mayfair;
+  return imageSets[theme.name] || dynamicImageSets[hashString(theme.name) % dynamicImageSets.length];
 }
 
 function renderIndex(theme) {
@@ -1601,8 +1806,10 @@ function renderJs(theme) {
 }
 
 function assertPrerequisite(themes) {
-  if (!Array.isArray(themes) || themes.length !== 5) {
-    throw new Error(`BLOCKED: Goal 1 must be completed first. Found ${Array.isArray(themes) ? themes.length : 0} theme entries, need 5.`);
+  if (!Array.isArray(themes) || themes.length !== EXPECTED_THEME_COUNT) {
+    throw new Error(
+      `BLOCKED: Goal 1 must be completed first. Found ${Array.isArray(themes) ? themes.length : 0} theme entries, need ${EXPECTED_THEME_COUNT}.`,
+    );
   }
 }
 

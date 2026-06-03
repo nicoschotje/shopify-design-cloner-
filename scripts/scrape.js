@@ -5,6 +5,7 @@ import { chromium } from 'playwright';
 const SHOPIFY_THEMES_URL = 'https://themes.shopify.com/themes';
 const OUTPUT_PATH = path.resolve('design-analysis.json');
 const SYSTEM_CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const THEME_COUNT = Number(process.env.THEME_COUNT || 10);
 
 function getLaunchOptions() {
   const executablePath =
@@ -97,12 +98,12 @@ async function getTopPaidThemeCards(page) {
     cards.push(...pageCards);
 
     const uniquePaid = dedupeTopThemeCards(cards);
-    if (uniquePaid.length >= 5) {
-      return uniquePaid.slice(0, 5);
+    if (uniquePaid.length >= THEME_COUNT) {
+      return uniquePaid.slice(0, THEME_COUNT);
     }
   }
 
-  return dedupeTopThemeCards(cards).slice(0, 5);
+  return dedupeTopThemeCards(cards).slice(0, THEME_COUNT);
 }
 
 function dedupeTopThemeCards(cards) {
@@ -471,6 +472,12 @@ function mapUiPatterns(featureLines, bodyText) {
 }
 
 function inferMood(name, bodyText, featureLines) {
+  const nameKey = String(name).toLowerCase();
+  if (/dune/.test(nameKey)) return 'sunlit / editorial / fashion-lifestyle';
+  if (/kettle/.test(nameKey)) return 'culinary / warm / conversion-focused';
+  if (/reinvent/.test(nameKey)) return 'beauty / refined / modern';
+  if (/poochy|pawmart/.test(nameKey)) return 'pet-friendly / playful / retail-ready';
+
   const all = `${name} ${featureLines.join(' ')}`.toLowerCase();
 
   if (/meadow|natural|organic|wellness|beauty|garden|calm/.test(all)) {
@@ -556,14 +563,14 @@ async function main() {
 
   try {
     const cards = await getTopPaidThemeCards(page);
-    if (cards.length < 5) {
-      throw new Error(`Found only ${cards.length} unique paid themes; need 5`);
+    if (cards.length < THEME_COUNT) {
+      throw new Error(`Found only ${cards.length} unique paid themes; need ${THEME_COUNT}`);
     }
 
     const themes = [];
     for (const [index, card] of cards.entries()) {
       try {
-        console.log(`Scraping ${index + 1}/5: ${card.text} (${card.href})`);
+        console.log(`Scraping ${index + 1}/${THEME_COUNT}: ${card.text} (${card.href})`);
         const theme = await extractTheme(browser, card, index + 1);
         themes.push(theme);
         console.log(`  ${theme.name} - $${theme.price}`);
@@ -572,8 +579,8 @@ async function main() {
       }
     }
 
-    if (themes.length < 5) {
-      throw new Error(`Extracted ${themes.length} complete themes; need 5`);
+    if (themes.length < THEME_COUNT) {
+      throw new Error(`Extracted ${themes.length} complete themes; need ${THEME_COUNT}`);
     }
 
     fs.writeFileSync(OUTPUT_PATH, `${JSON.stringify(themes, null, 2)}\n`, 'utf8');

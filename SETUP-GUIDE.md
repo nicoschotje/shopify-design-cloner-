@@ -39,7 +39,7 @@ Connect your GitHub account and select the `shopify-design-cloner` repo.
 > Read `AGENTS.md` first, then read `goal-1-recon.md`. Follow the instructions in `goal-1-recon.md` exactly. The verify gate is `npm run verify-recon` — do not open a PR until it exits with code 0. Fix your own failures without asking for confirmation. If you cannot complete the goal, use the BLOCKED protocol described in `goal-1-recon.md`.
 
 ### After Codex opens a PR:
-1. Review the PR diff — check that `design-analysis.json` has 5 real theme entries with real data
+1. Review the PR diff — check that `design-analysis.json` has 10 real theme entries with real data
 2. Check CI is green (or run `npm run verify-recon` yourself if CI isn't set up)
 3. Merge the PR
 4. **Do not run Goal 2 until you have merged Goal 1.**
@@ -67,7 +67,7 @@ Connect your GitHub account and select the `shopify-design-cloner` repo.
 
 ```
 shopify-design-cloner/
-├── design-analysis.json       ← 5 premium Shopify themes, fully analyzed
+├── design-analysis.json       ← 10 premium Shopify themes, fully analyzed
 └── sites/
     ├── prestige/              ← example: one site per theme
     │   ├── index.html
@@ -76,7 +76,7 @@ shopify-design-cloner/
     ├── theme-2/ ...
     ├── theme-3/ ...
     ├── theme-4/ ...
-    └── theme-5/ ...
+    └── theme-10/ ...
 ```
 
 Each `index.html` opens as a standalone polished website with the design language of one
@@ -99,5 +99,5 @@ Fix the one thing named, then re-run the same goal prompt.
 ## Cost note
 
 Goal 1 is a short run (scraping + JSON generation) — probably under 30 minutes.
-Goal 2 is heavier (building 5 complete sites) — expect 1–2 hours, possibly more.
+Goal 2 is heavier (building 10 complete sites) — expect 1–2 hours, possibly more.
 Both run on your ChatGPT/Codex usage. Scope is already tight so token cost should be manageable.

@@ -1,15 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Shopify+Sans+Medium:wght@300;400;500;600;700;800&family=Times:wght@300;400;500;600;700;800&display=swap');
 
 :root {
   --color-primary: #000000;
   --color-secondary: #f4f4f4;
-  --color-accent: #333333;
+  --color-accent: #0000ee;
   --color-text: #ffffff;
   --color-bg: #000000;
-  --font-heading: "Barlow", serif;
-  --font-body: "Barlow", sans-serif;
-  --base-size: 15.86px;
-  --heading-weight: 800;
+  --font-heading: "Shopify Sans Medium", serif;
+  --font-body: "Times", sans-serif;
+  --base-size: 16px;
+  --heading-weight: 700;
   --surface: #111111;
   --surface-muted: #171717;
   --on-primary: #ffffff;
