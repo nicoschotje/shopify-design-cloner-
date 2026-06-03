@@ -2,7 +2,7 @@
   "name": "shopify-design-cloner",
   "version": "1.0.0",
   "private": true,
-  "description": "Scrape premium Shopify theme design data and generate static theme-inspired sites.",
+  "description": "Scrape premium $500-$1000 Shopify preset design data and generate static theme-inspired sites.",
   "type": "module",
   "scripts": {
     "scrape": "node scripts/scrape.js",

@@ -130,6 +130,90 @@ const imageSets = {
       'https://images.unsplash.com/photo-1602872030490-4a484a7b3ba6?w=900&q=80',
     ],
   },
+  Noor: {
+    hero: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=900&q=80',
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=80',
+      'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=900&q=80',
+      'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=80',
+      'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=900&q=80',
+    ],
+  },
+  Taiga: {
+    hero: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=900&q=80',
+      'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=80',
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=900&q=80',
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=80',
+      'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=900&q=80',
+    ],
+  },
+  Deck: {
+    hero: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1556906781-9a412961c28c?w=900&q=80',
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=80',
+      'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=80',
+      'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=900&q=80',
+      'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=900&q=80',
+    ],
+  },
+  Voyage: {
+    hero: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=900&q=80',
+      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&q=80',
+      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1503602642458-232111445657?w=900&q=80',
+      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&q=80',
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=80',
+    ],
+  },
+  King: {
+    hero: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900&q=80',
+      'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=900&q=80',
+      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=900&q=80',
+      'https://images.unsplash.com/photo-1587302912306-cf1ed9c33146?w=900&q=80',
+      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=900&q=80',
+    ],
+  },
+  Bubbly: {
+    hero: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&q=80',
+      'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=900&q=80',
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&q=80',
+      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&q=80',
+      'https://images.unsplash.com/photo-1503602642458-232111445657?w=900&q=80',
+    ],
+  },
 };
 
 const profiles = {
@@ -292,6 +376,198 @@ const profiles = {
       'The Mayfair-inspired design uses restrained contrast, refined accents, and generous editorial sections. It is built for considered purchases where trust grows through composition.',
     newsletter: 'Request the private edit',
     footerNote: 'Premium ecommerce language for interiors, objects, and client-led retail.',
+  },
+  Noor: {
+    brand: 'Noor Atelier',
+    eyebrow: 'Soft luxury with a luminous retail rhythm',
+    headline: 'A quieter kind of premium, made to glow.',
+    subhead:
+      'Noor Atelier blends refined apparel, elevated accessories, and warm editorial storytelling for shoppers who want restraint with presence.',
+    cta: 'Enter the luminous edit',
+    announcement: 'Private Noor preview: early access to tonal layers, refined sets, and concierge styling.',
+    nav: ['New Light', 'Apparel', 'Accessories', 'Concierge'],
+    products: [
+      ['Silk Drape Shirt', '$245', 'Fluid silk with a soft matte finish and an effortless evening shape.'],
+      ['Pearl Handle Mini', '$310', 'A sculptural carry piece with luminous hardware and compact volume.'],
+      ['Noor Wrap Coat', '$520', 'A tonal outer layer cut for quiet drama and long-season wear.'],
+    ],
+    collections: ['Tonal evening', 'Soft tailoring', 'Luminous accessories', 'Private wardrobe'],
+    features: [
+      ['Refined navigation', 'Slim sticky controls and considered spacing keep premium browsing calm and deliberate.'],
+      ['Editorial light', 'Large imagery and quiet type create a magazine-like pace without burying product actions.'],
+      ['Concierge conversion', 'Newsletter and product modules support high-intent shoppers with measured prompts.'],
+      ['Material-led cards', 'Product copy gives texture, finish, and use case enough room to matter.'],
+    ],
+    testimonials: [
+      ['Sana R.', 'The store feels expensive before you even reach the collection grid.'],
+      ['Lumi House', 'The product stories have elegance, but checkout still feels close.'],
+      ['A. Vale', 'It captures quiet luxury without looking generic.'],
+    ],
+    storyTitle: 'Refined commerce shaped by light and restraint',
+    story:
+      'The Noor-inspired direction uses luminous imagery, soft hierarchy, and premium editorial pacing. It keeps interaction subtle while making every product feel carefully chosen.',
+    newsletter: 'Join the private Noor list',
+    footerNote: 'Quiet luxury storefront language for fashion and accessories.',
+  },
+  Taiga: {
+    brand: 'Taiga Range',
+    eyebrow: 'Alpine lifestyle commerce with editorial depth',
+    headline: 'Technical layers for the wild, styled for the city.',
+    subhead:
+      'Taiga Range presents outdoor apparel and travel essentials with cinematic imagery, tactile product cards, and calm conversion structure.',
+    cta: 'Shop the alpine edit',
+    announcement: 'New terrain capsule: waterproof layers, insulated packs, and cold-weather accessories.',
+    nav: ['Terrain', 'Layers', 'Packs', 'Journal'],
+    products: [
+      ['Thermal Field Parka', '$430', 'A weather-ready shell with a soft insulated core and clean city profile.'],
+      ['Summit Knit Base', '$155', 'A breathable base layer with refined rib texture and easy layering weight.'],
+      ['Trail Utility Pack', '$210', 'Compact storage with weatherproof pockets and polished hardware.'],
+    ],
+    collections: ['Alpine shell', 'Base layers', 'Travel packs', 'Cold weather edit'],
+    features: [
+      ['Cinematic scale', 'Full-bleed hero and lookbook sections make outdoor products feel premium.'],
+      ['Practical detail', 'Product cards balance technical benefits with styling language.'],
+      ['Seasonal merchandising', 'Collections group by terrain and use case for confident exploration.'],
+      ['Responsive drama', 'Mobile keeps image impact while preserving fast product actions.'],
+    ],
+    testimonials: [
+      ['Elias M.', 'It looks like an outdoor editorial but shops like a focused store.'],
+      ['Northline Supply', 'The seasonal collection flow finally feels premium enough for our pricing.'],
+      ['Mara V.', 'The technical details are clear without making the page feel clinical.'],
+    ],
+    storyTitle: 'Alpine utility translated into premium storefront pacing',
+    story:
+      'The Taiga-inspired site combines rugged imagery, high-contrast merchandising, and calm product education. It is built for technical goods that still need a strong visual identity.',
+    newsletter: 'Receive the range notes',
+    footerNote: 'Editorial outdoor commerce for technical apparel and premium travel gear.',
+  },
+  Deck: {
+    brand: 'Deck Division',
+    eyebrow: 'Street-luxury drops with modular buying paths',
+    headline: 'Drop culture sharpened into a premium storefront.',
+    subhead:
+      'Deck Division frames sneakers, modular bags, and hardwearing layers through bold grids, dark surfaces, and launch-ready interaction.',
+    cta: 'Open the drop deck',
+    announcement: 'Deck 05 opens today: member bundles, timed release cards, and fast shipping.',
+    nav: ['Drops', 'Footwear', 'Carry', 'Fit'],
+    products: [
+      ['Deck Runner 05', '$240', 'A sculpted sneaker with layered mesh, tonal overlays, and aggressive sole geometry.'],
+      ['Modular Flight Vest', '$315', 'Technical storage, adjustable panels, and a clean street-luxury silhouette.'],
+      ['Cargo Sling System', '$148', 'A crossbody pack with detachable compartments and matte hardware.'],
+    ],
+    collections: ['Footwear deck', 'Modular carry', 'Night layers', 'Member release'],
+    features: [
+      ['Launch urgency', 'Promotional strips, countdown logic, and quick-add actions support drop mechanics.'],
+      ['Dark editorial surfaces', 'High contrast creates a premium release environment without visual clutter.'],
+      ['Fast product comparison', 'Cards keep product name, price, and functional copy instantly scannable.'],
+      ['Motion without noise', 'Hover zoom and parallax add energy while keeping checkout intent clear.'],
+    ],
+    testimonials: [
+      ['Kai S.', 'It feels like a launch room, not a catalog template.'],
+      ['Gridline Studio', 'Our most technical pieces finally look expensive online.'],
+      ['M. Frost', 'The release flow is fast but still feels designed.'],
+    ],
+    storyTitle: 'A modular premium page for limited releases',
+    story:
+      'The Deck-inspired storefront uses hard contrast, compact modules, and release-driven content. It is built for brands selling technical fashion at a premium price point.',
+    newsletter: 'Unlock member release access',
+    footerNote: 'Street-luxury commerce for drops, footwear, and modular accessories.',
+  },
+  Voyage: {
+    brand: 'Voyage Works',
+    eyebrow: 'Travel systems for premium movement',
+    headline: 'A better way to move through every checkpoint.',
+    subhead:
+      'Voyage Works sells travel gear, compact accessories, and mobility essentials through cinematic sections and spec-driven product paths.',
+    cta: 'Pack the system',
+    announcement: 'Voyage system launch: complimentary packing kit on orders above $300.',
+    nav: ['Systems', 'Carry', 'Transit', 'Guides'],
+    products: [
+      ['Transit Shell Duffel', '$285', 'A structured carry piece with weather-ready fabric and quiet hardware.'],
+      ['Compression Pack Set', '$96', 'A three-piece packing system for streamlined business and leisure travel.'],
+      ['Gate Jacket', '$340', 'A lightweight travel layer with hidden storage and crisp tailoring.'],
+    ],
+    collections: ['Carry systems', 'Airport layers', 'Packing tools', 'Long-haul edit'],
+    features: [
+      ['Journey-led structure', 'Sections mirror how shoppers plan, pack, and move.'],
+      ['Technical reassurance', 'Spec-friendly cards explain material, weight, storage, and use case.'],
+      ['Cinematic product story', 'Image-heavy editorial blocks create aspiration around practical objects.'],
+      ['Conversion clarity', 'Sticky nav, quick view, and product cards stay direct on mobile and desktop.'],
+    ],
+    testimonials: [
+      ['Jonas T.', 'It makes travel gear feel like a premium system instead of a pile of bags.'],
+      ['Porter Lane', 'Customers understand bundles faster and buy more complete setups.'],
+      ['Amelie R.', 'The site feels cinematic but still practical.'],
+    ],
+    storyTitle: 'Premium travel commerce with system-level clarity',
+    story:
+      'The Voyage-inspired direction turns transit, storage, and apparel into a cohesive travel system. Visual ambition and practical specs share the same page.',
+    newsletter: 'Get the packing brief',
+    footerNote: 'Premium static commerce for travel systems, carry goods, and technical apparel.',
+  },
+  King: {
+    brand: 'King Circuit',
+    eyebrow: 'Royal-grade tech commerce for complex catalogs',
+    headline: 'High-spec products deserve a commanding storefront.',
+    subhead:
+      'King Circuit gives electronics and performance gear a dense but polished retail surface with strong hierarchy and high-conversion modules.',
+    cta: 'Build the system',
+    announcement: 'King bundle event: smart timers, kit pricing, and priority support are live.',
+    nav: ['Systems', 'Components', 'Compare', 'Support'],
+    products: [
+      ['Crown Control Hub', '$310', 'A central device dock with programmable controls and fast charging.'],
+      ['Regal Audio Bar', '$420', 'Directional audio for workstations, gaming setups, and premium retail demos.'],
+      ['Noor Power Array', '$195', 'A compact charging system with cable routing and status indicators.'],
+    ],
+    collections: ['Command systems', 'Audio control', 'Power arrays', 'Smart bundles'],
+    features: [
+      ['Dense merchandising', 'Large catalogs stay organized with clear modules and strong product hierarchy.'],
+      ['Conversion tooling', 'Timers, quick view, sticky controls, and carts support high-intent buyers.'],
+      ['Spec confidence', 'Product copy gives technical buyers enough detail to compare quickly.'],
+      ['Premium intensity', 'Hard contrast and accent color create a confident electronics storefront.'],
+    ],
+    testimonials: [
+      ['Devon K.', 'The design makes complex hardware feel premium and easy to evaluate.'],
+      ['Axiom Labs', 'Our bundles became much clearer after moving to this structure.'],
+      ['T. Morgan', 'It has the confidence of a flagship product launch.'],
+    ],
+    storyTitle: 'A commanding interface for technical retail',
+    story:
+      'The King-inspired concept uses bold type, dense buying modules, and conversion-focused interactions to make high-spec products easier to trust and buy.',
+    newsletter: 'Join the system briefing',
+    footerNote: 'High-conversion static commerce for electronics and technical product catalogs.',
+  },
+  Bubbly: {
+    brand: 'Bubbly Studio',
+    eyebrow: 'Colorful fashion commerce with premium polish',
+    headline: 'Playful drops without losing the luxury signal.',
+    subhead:
+      'Bubbly Studio turns expressive apparel, bright accessories, and giftable products into a vibrant storefront that still feels expensive.',
+    cta: 'Shop the color drop',
+    announcement: 'Color capsule live: limited sets, bright accessories, and member-only bundles.',
+    nav: ['Drops', 'Color', 'Sets', 'Studio'],
+    products: [
+      ['Bubble Knit Polo', '$168', 'A saturated knit with soft structure and easy statement color.'],
+      ['Gloss Mini Tote', '$145', 'A compact lacquered carry piece with rounded edges and bright hardware.'],
+      ['Color Stack Set', '$112', 'Layered accessories designed for gifting and expressive styling.'],
+    ],
+    collections: ['Color drops', 'Giftable sets', 'Studio brights', 'Weekend edit'],
+    features: [
+      ['Expressive hierarchy', 'Color-forward sections feel lively while keeping product cards crisp.'],
+      ['Giftable commerce', 'Bundles, newsletter prompts, and collection rails support seasonal buying.'],
+      ['Animated discovery', 'Hover zoom, parallax, and quick view give the page playful movement.'],
+      ['Premium restraint', 'Bright visuals are balanced with strong spacing and controlled typography.'],
+    ],
+    testimonials: [
+      ['Lena P.', 'It is playful but not childish, which is exactly what our brand needed.'],
+      ['Studio Pop', 'The colors finally feel premium online.'],
+      ['Mika T.', 'The product grid is fun and still very easy to shop.'],
+    ],
+    storyTitle: 'A colorful storefront with commercial discipline',
+    story:
+      'The Bubbly-inspired page uses expressive visuals, bright accents, and polished ecommerce sections. It is built for brands that want joy without sacrificing premium structure.',
+    newsletter: 'Get first access to color drops',
+    footerNote: 'Premium playful commerce for colorful fashion, gifts, and lifestyle goods.',
   },
 };
 
@@ -1566,6 +1842,76 @@ h3 {
 .site-mayfair h1,
 .site-mayfair h2 {
   max-width: 12ch;
+}
+
+.site-noor .hero__media {
+  filter: saturate(0.82) brightness(1.08);
+}
+
+.site-noor .section-shell {
+  padding-left: clamp(1rem, 7vw, 6rem);
+  padding-right: clamp(1rem, 7vw, 6rem);
+}
+
+.site-noor .product-card,
+.site-noor .testimonial-card {
+  background: linear-gradient(180deg, var(--surface), color-mix(in srgb, var(--color-accent), transparent 92%));
+}
+
+.site-taiga .hero__content,
+.site-voyage .hero__content {
+  width: min(100%, 1120px);
+}
+
+.site-taiga .lookbook-frame,
+.site-voyage .lookbook-frame {
+  border-radius: 0;
+}
+
+.site-taiga .feature-item {
+  border-top: 4px solid var(--color-accent);
+}
+
+.site-deck .hero__media,
+.site-king .hero__media {
+  filter: contrast(1.22) saturate(1.15);
+}
+
+.site-deck .product-grid,
+.site-king .product-grid {
+  gap: 0;
+}
+
+.site-deck .product-card,
+.site-king .product-card {
+  background: color-mix(in srgb, var(--surface), var(--color-primary) 8%);
+}
+
+.site-deck .collection-tile,
+.site-king .collection-tile {
+  min-height: 420px;
+}
+
+.site-bubbly .announcement-bar,
+.site-bubbly .newsletter {
+  background: linear-gradient(90deg, var(--color-accent), color-mix(in srgb, var(--color-accent), #ffffff 34%));
+}
+
+.site-bubbly .brand-symbol,
+.site-bubbly .product-card,
+.site-bubbly .feature-item,
+.site-bubbly .testimonial-card {
+  border-radius: 8px;
+}
+
+.site-bubbly .feature-item:nth-child(odd) {
+  background: color-mix(in srgb, var(--color-accent), white 78%);
+  color: #111111;
+}
+
+.site-voyage .story,
+.site-taiga .story {
+  background: linear-gradient(135deg, var(--color-secondary), color-mix(in srgb, var(--color-accent), white 82%));
 }
 
 @media (min-width: 768px) {

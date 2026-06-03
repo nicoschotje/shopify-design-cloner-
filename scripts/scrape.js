@@ -6,6 +6,8 @@ const SHOPIFY_THEMES_URL = 'https://themes.shopify.com/themes';
 const OUTPUT_PATH = path.resolve('design-analysis.json');
 const SYSTEM_CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const THEME_COUNT = Number(process.env.THEME_COUNT || 10);
+const MIN_THEME_PRICE = Number(process.env.MIN_THEME_PRICE || 500);
+const MAX_THEME_PRICE = Number(process.env.MAX_THEME_PRICE || 1000);
 
 function getLaunchOptions() {
   const executablePath =
@@ -48,11 +50,6 @@ function extractPrice(text) {
   return match ? Number(match[1].replaceAll(',', '')) : 0;
 }
 
-function extractBaseSlug(href) {
-  const match = href.match(/\/themes\/([^/?#]+)/);
-  return match?.[1] ?? href;
-}
-
 function cleanText(value) {
   return String(value ?? '')
     .replace(/\s+/g, ' ')
@@ -84,7 +81,7 @@ async function collectThemeCards(page) {
   });
 }
 
-async function getTopPaidThemeCards(page) {
+async function getTopPremiumPresetCards(page) {
   await activatePriceSort(page);
 
   const cards = [];
@@ -97,30 +94,35 @@ async function getTopPaidThemeCards(page) {
     const pageCards = await collectThemeCards(page);
     cards.push(...pageCards);
 
-    const uniquePaid = dedupeTopThemeCards(cards);
-    if (uniquePaid.length >= THEME_COUNT) {
-      return uniquePaid.slice(0, THEME_COUNT);
+    const premiumPresets = getTopThemePresets(cards);
+    if (premiumPresets.length >= THEME_COUNT) {
+      return premiumPresets.slice(0, THEME_COUNT);
     }
   }
 
-  return dedupeTopThemeCards(cards).slice(0, THEME_COUNT);
+  return getTopThemePresets(cards).slice(0, THEME_COUNT);
 }
 
-function dedupeTopThemeCards(cards) {
-  const seenBaseSlugs = new Set();
+function extractPresetKey(href) {
+  const match = href.match(/\/themes\/([^/?#]+)\/presets\/([^/?#]+)/);
+  return match ? `${match[1]}/${match[2]}` : href;
+}
+
+function getTopThemePresets(cards) {
+  const seenPresets = new Set();
   return cards
     .map((card, index) => ({
       ...card,
       href: absoluteUrl(card.href),
-      baseSlug: extractBaseSlug(card.href),
+      presetKey: extractPresetKey(card.href),
       price: extractPrice(card.text),
       order: index,
     }))
-    .filter((card) => card.price > 0)
+    .filter((card) => card.price >= MIN_THEME_PRICE && card.price <= MAX_THEME_PRICE)
     .sort((a, b) => b.price - a.price || a.order - b.order)
     .filter((card) => {
-      if (seenBaseSlugs.has(card.baseSlug)) return false;
-      seenBaseSlugs.add(card.baseSlug);
+      if (seenPresets.has(card.presetKey)) return false;
+      seenPresets.add(card.presetKey);
       return true;
     });
 }
@@ -477,6 +479,12 @@ function inferMood(name, bodyText, featureLines) {
   if (/kettle/.test(nameKey)) return 'culinary / warm / conversion-focused';
   if (/reinvent/.test(nameKey)) return 'beauty / refined / modern';
   if (/poochy|pawmart/.test(nameKey)) return 'pet-friendly / playful / retail-ready';
+  if (/noor/.test(nameKey)) return 'refined / luxury / elegant';
+  if (/taiga/.test(nameKey)) return 'alpine / editorial / lifestyle';
+  if (/deck/.test(nameKey)) return 'modular / bold / street-luxury';
+  if (/voyage/.test(nameKey)) return 'travel / technical / lifestyle';
+  if (/king/.test(nameKey)) return 'bold / technical / conversion-focused';
+  if (/bubbly/.test(nameKey)) return 'playful / colorful / fashion-lifestyle';
 
   const all = `${name} ${featureLines.join(' ')}`.toLowerCase();
 
@@ -562,9 +570,9 @@ async function main() {
   });
 
   try {
-    const cards = await getTopPaidThemeCards(page);
+    const cards = await getTopPremiumPresetCards(page);
     if (cards.length < THEME_COUNT) {
-      throw new Error(`Found only ${cards.length} unique paid themes; need ${THEME_COUNT}`);
+      throw new Error(`Found only ${cards.length} premium presets priced $${MIN_THEME_PRICE}-$${MAX_THEME_PRICE}; need ${THEME_COUNT}`);
     }
 
     const themes = [];
@@ -584,7 +592,7 @@ async function main() {
     }
 
     fs.writeFileSync(OUTPUT_PATH, `${JSON.stringify(themes, null, 2)}\n`, 'utf8');
-    console.log('\nTop paid Shopify themes by unique theme family:');
+    console.log(`\nTop premium Shopify presets priced $${MIN_THEME_PRICE}-$${MAX_THEME_PRICE}:`);
     for (const theme of themes) {
       console.log(`${theme.rank}. ${theme.name} - $${theme.price}`);
     }

@@ -1,15 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Shopify+Sans+Medium:wght@300;400;500;600;700;800&family=Times:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&display=swap');
 
 :root {
   --color-primary: #000000;
   --color-secondary: #f4f4f4;
-  --color-accent: #0000ee;
+  --color-accent: #333333;
   --color-text: #ffffff;
   --color-bg: #000000;
-  --font-heading: "Shopify Sans Medium", serif;
-  --font-body: "Times", sans-serif;
-  --base-size: 16px;
-  --heading-weight: 700;
+  --font-heading: "Barlow", serif;
+  --font-body: "Barlow", sans-serif;
+  --base-size: 15.86px;
+  --heading-weight: 800;
   --surface: #111111;
   --surface-muted: #171717;
   --on-primary: #ffffff;
@@ -773,6 +773,76 @@ h3 {
 .site-mayfair h1,
 .site-mayfair h2 {
   max-width: 12ch;
+}
+
+.site-noor .hero__media {
+  filter: saturate(0.82) brightness(1.08);
+}
+
+.site-noor .section-shell {
+  padding-left: clamp(1rem, 7vw, 6rem);
+  padding-right: clamp(1rem, 7vw, 6rem);
+}
+
+.site-noor .product-card,
+.site-noor .testimonial-card {
+  background: linear-gradient(180deg, var(--surface), color-mix(in srgb, var(--color-accent), transparent 92%));
+}
+
+.site-taiga .hero__content,
+.site-voyage .hero__content {
+  width: min(100%, 1120px);
+}
+
+.site-taiga .lookbook-frame,
+.site-voyage .lookbook-frame {
+  border-radius: 0;
+}
+
+.site-taiga .feature-item {
+  border-top: 4px solid var(--color-accent);
+}
+
+.site-deck .hero__media,
+.site-king .hero__media {
+  filter: contrast(1.22) saturate(1.15);
+}
+
+.site-deck .product-grid,
+.site-king .product-grid {
+  gap: 0;
+}
+
+.site-deck .product-card,
+.site-king .product-card {
+  background: color-mix(in srgb, var(--surface), var(--color-primary) 8%);
+}
+
+.site-deck .collection-tile,
+.site-king .collection-tile {
+  min-height: 420px;
+}
+
+.site-bubbly .announcement-bar,
+.site-bubbly .newsletter {
+  background: linear-gradient(90deg, var(--color-accent), color-mix(in srgb, var(--color-accent), #ffffff 34%));
+}
+
+.site-bubbly .brand-symbol,
+.site-bubbly .product-card,
+.site-bubbly .feature-item,
+.site-bubbly .testimonial-card {
+  border-radius: 8px;
+}
+
+.site-bubbly .feature-item:nth-child(odd) {
+  background: color-mix(in srgb, var(--color-accent), white 78%);
+  color: #111111;
+}
+
+.site-voyage .story,
+.site-taiga .story {
+  background: linear-gradient(135deg, var(--color-secondary), color-mix(in srgb, var(--color-accent), white 82%));
 }
 
 @media (min-width: 768px) {
