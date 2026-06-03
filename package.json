@@ -1,0 +1,17 @@
+{
+  "name": "shopify-design-cloner",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Scrape premium Shopify theme design data and generate static theme-inspired sites.",
+  "type": "module",
+  "scripts": {
+    "scrape": "node scripts/scrape.js",
+    "verify-recon": "node scripts/verify-recon.js",
+    "build": "node scripts/build.js",
+    "verify": "node scripts/verify.js",
+    "pipeline": "npm run scrape && npm run verify-recon && npm run build && npm run verify"
+  },
+  "devDependencies": {
+    "playwright": "^1.53.0"
+  }
+}

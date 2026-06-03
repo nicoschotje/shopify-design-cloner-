@@ -1,0 +1,1636 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
+const analysisPath = path.resolve('design-analysis.json');
+const sitesPath = path.resolve('sites');
+
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
+}
+
+function normalizeHex(hex) {
+  const clean = String(hex || '#ffffff').trim().toLowerCase();
+  if (/^#[0-9a-f]{3}$/.test(clean)) {
+    return `#${clean[1]}${clean[1]}${clean[2]}${clean[2]}${clean[3]}${clean[3]}`;
+  }
+  return /^#[0-9a-f]{6}$/.test(clean) ? clean : '#ffffff';
+}
+
+function luminance(hex) {
+  const clean = normalizeHex(hex).slice(1);
+  const channels = [0, 2, 4].map((start) => {
+    const value = Number.parseInt(clean.slice(start, start + 2), 16) / 255;
+    return value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+  });
+
+  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+}
+
+function textOn(hex) {
+  return luminance(hex) > 0.48 ? '#111111' : '#ffffff';
+}
+
+function fontImport(theme) {
+  const fonts = [theme.typography.heading_font, theme.typography.body_font]
+    .filter(Boolean)
+    .filter((font, index, list) => list.indexOf(font) === index)
+    .map((font) => `family=${font.trim().replaceAll(' ', '+')}:wght@300;400;500;600;700;800`);
+
+  return `@import url('https://fonts.googleapis.com/css2?${fonts.join('&')}&display=swap');`;
+}
+
+const imageSets = {
+  Throne: {
+    hero: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900&q=80',
+      'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=900&q=80',
+      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=900&q=80',
+      'https://images.unsplash.com/photo-1587302912306-cf1ed9c33146?w=900&q=80',
+      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=900&q=80',
+    ],
+  },
+  Meadow: {
+    hero: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=80',
+      'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=900&q=80',
+      'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=80',
+      'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=900&q=80',
+      'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=80',
+    ],
+  },
+  Maya: {
+    hero: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&q=80',
+      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&q=80',
+      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&q=80',
+      'https://images.unsplash.com/photo-1503602642458-232111445657?w=900&q=80',
+      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&q=80',
+    ],
+  },
+  Pace: {
+    hero: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1556906781-9a412961c28c?w=900&q=80',
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=80',
+      'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=80',
+      'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=900&q=80',
+      'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=900&q=80',
+    ],
+  },
+  Mayfair: {
+    hero: 'https://images.unsplash.com/photo-1618220179428-22790b461013?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=900&q=80',
+      'https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=900&q=80',
+      'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=900&q=80',
+      'https://images.unsplash.com/photo-1538688423619-a81d3f23454b?w=900&q=80',
+      'https://images.unsplash.com/photo-1602872030490-4a484a7b3ba6?w=900&q=80',
+    ],
+  },
+};
+
+const profiles = {
+  Throne: {
+    brand: 'Voltforge',
+    eyebrow: 'Precision electronics for restless operators',
+    headline: 'Command every signal from one engineered desk.',
+    subhead:
+      'Voltforge curates modular audio, charging, and control tools for creators who need their setup to move as fast as their ideas.',
+    cta: 'Build the command center',
+    announcement: 'Launch bundle: free carbon cable kit with every studio order over $250.',
+    nav: ['Systems', 'Audio', 'Power', 'Support'],
+    products: [
+      ['Signal Core Speaker', '$248', 'Directional desktop audio with pressure-sealed clarity.'],
+      ['Dock Array 6', '$186', 'A six-device charging dock wrapped in a machined shell.'],
+      ['Orbit Control Pad', '$214', 'Programmable shortcuts, haptic dial, and low-latency pairing.'],
+    ],
+    collections: ['Creator workstations', 'Travel power', 'Audio rigs', 'Smart home control'],
+    features: [
+      ['Live diagnostics', 'Status strips and low-noise alerts keep every device visible without clutter.'],
+      ['Fast cart flows', 'Bundled accessories, progress incentives, and quick-add panels reduce buying friction.'],
+      ['Deep comparison', 'Spec tables and product tabs help shoppers understand compatibility before checkout.'],
+      ['Scale-ready content', 'Editorial product stories and guided collections keep large catalogs easy to scan.'],
+    ],
+    testimonials: [
+      ['Mika R.', 'The layout made our electronics catalog feel premium without hiding the specifications.'],
+      ['Darren K.', 'Customers compare kits faster and our support questions dropped within a week.'],
+      ['Studio Nine', 'The product cards feel tactile, sharp, and made for high-consideration tech.'],
+    ],
+    storyTitle: 'Built for complex kits without visual noise',
+    story:
+      'The Throne-inspired direction uses hard contrast, tight product modules, and dense-but-clean buying paths. Every section gives technical shoppers another reason to trust the hardware.',
+    newsletter: 'Get the setup brief',
+    footerNote: 'Engineered commerce patterns for high-spec equipment stores.',
+  },
+  Meadow: {
+    brand: 'Field & Loom',
+    eyebrow: 'Soft layers, natural goods, slow mornings',
+    headline: 'A calmer wardrobe for days that start outside.',
+    subhead:
+      'Field & Loom pairs relaxed apparel, textural accessories, and seasonal edits with a warm editorial rhythm.',
+    cta: 'Shop the new field edit',
+    announcement: 'Summer meadow edit is live: natural fibers, soft packs, and easy returns.',
+    nav: ['New', 'Linen', 'Objects', 'Journal'],
+    products: [
+      ['Washed Linen Set', '$168', 'Airy separates with a soft-worn hand feel.'],
+      ['Market Basket Tote', '$92', 'Structured raffia with leather-trimmed handles.'],
+      ['Herb Garden Wrap', '$124', 'A light layer for cool mornings and late dinners.'],
+    ],
+    collections: ['Linen essentials', 'Garden weekends', 'Picnic objects', 'Sun-washed layers'],
+    features: [
+      ['Editorial pacing', 'Soft image blocks and generous space let natural materials lead the page.'],
+      ['Warm discovery', 'Collection tiles invite browsing without pushing shoppers into a narrow path.'],
+      ['Responsive calm', 'Mobile layouts keep images large and copy short for relaxed scanning.'],
+      ['Trust in texture', 'Detailed product notes give shoppers practical care and fit confidence.'],
+    ],
+    testimonials: [
+      ['Elena S.', 'The page feels serene and still gives every product enough commercial clarity.'],
+      ['Oren & Co.', 'Our seasonal edits finally look as gentle online as they do in the studio.'],
+      ['Maren L.', 'The collection navigation made it simple to build an entire outfit.'],
+    ],
+    storyTitle: 'A pastoral storefront with practical merchandising',
+    story:
+      'The Meadow-inspired site leans into tactile neutrals, open spacing, and journal-like image grids. It feels soft, but the buying path stays deliberate and direct.',
+    newsletter: 'Receive the seasonal journal',
+    footerNote: 'Warm ecommerce composition for apparel, home, and lifestyle catalogs.',
+  },
+  Maya: {
+    brand: 'Maya Color Lab',
+    eyebrow: 'Graphic objects for visually hungry homes',
+    headline: 'Turn ordinary shelves into small exhibitions.',
+    subhead:
+      'Maya Color Lab sells sculptural decor, playful accessories, and artful everyday pieces through a bright gallery-like storefront.',
+    cta: 'Open the color shop',
+    announcement: 'Limited color drops ship this Friday with complimentary gift notes.',
+    nav: ['Drops', 'Objects', 'Studio', 'Archive'],
+    products: [
+      ['Stack Vase Set', '$132', 'Nested ceramic forms glazed in high-saturation bands.'],
+      ['Loop Table Lamp', '$188', 'A compact lamp with a sculptural base and warm diffusion.'],
+      ['Pixel Serving Tray', '$76', 'Graphic lacquer tray sized for coffee, keys, or display.'],
+    ],
+    collections: ['Color blocks', 'Studio objects', 'Giftable forms', 'Wall and shelf'],
+    features: [
+      ['Image-first rhythm', 'Large visual breaks keep color and shape at the center of the shopping path.'],
+      ['Playful conversion', 'Quick-view details and animated cards make discovery feel expressive.'],
+      ['Gallery utility', 'Collections are grouped by mood so shoppers can browse like a curator.'],
+      ['Flexible storytelling', 'Editorial modules show how pieces live together in real rooms.'],
+    ],
+    testimonials: [
+      ['Juno P.', 'The site makes our small objects feel collectible and considered.'],
+      ['Color House', 'Customers spend longer in the lookbook and come back for each new drop.'],
+      ['Rae T.', 'Every section has energy without becoming hard to shop.'],
+    ],
+    storyTitle: 'A visual catalog with a playful buying path',
+    story:
+      'The Maya-inspired build uses gallery spacing, animated color surfaces, and compact product logic. It is bright, but every interaction still leads toward a confident add-to-cart moment.',
+    newsletter: 'Join the color drop list',
+    footerNote: 'Expressive storefront patterns for artful products and design-led brands.',
+  },
+  Pace: {
+    brand: 'Apex Pace',
+    eyebrow: 'Street-laced footwear with performance tension',
+    headline: 'Built for the sprint between runway and asphalt.',
+    subhead:
+      'Apex Pace frames shoes, kits, and accessories with a sharp editorial layout tuned for fast-moving drops.',
+    cta: 'Enter the drop',
+    announcement: 'Drop 04 opens at noon: early access for members ends in 48 hours.',
+    nav: ['Drops', 'Footwear', 'Fit Guide', 'Stories'],
+    products: [
+      ['Velocity Runner', '$210', 'Layered mesh, sculpted sole, and a clean speed profile.'],
+      ['Night Track Jacket', '$184', 'Matte shell with reflective seam lines and secure pockets.'],
+      ['Grid Utility Pack', '$96', 'Compact sling with modular compartments for daily carry.'],
+    ],
+    collections: ['Footwear drops', 'Training layers', 'Night movement', 'Utility carry'],
+    features: [
+      ['High-contrast scans', 'Black fields, bold type, and fast grids make new drops instantly legible.'],
+      ['Member urgency', 'Countdowns and promo bars support limited-release merchandising.'],
+      ['Fit-first details', 'Size guidance and product tabs reduce uncertainty before checkout.'],
+      ['Motion cues', 'Parallax and hover zoom add energy without slowing the buying path.'],
+    ],
+    testimonials: [
+      ['Riko M.', 'The page finally matches the pressure and speed of our release calendar.'],
+      ['Eastline Run', 'Customers read fit details and still move quickly into checkout.'],
+      ['Noah V.', 'It feels editorial, but every product action is right where you need it.'],
+    ],
+    storyTitle: 'Release energy without sacrificing product clarity',
+    story:
+      'The Pace-inspired storefront is dark, direct, and kinetic. Product cards behave like drop cards, while the editorial sections build appetite for the next release.',
+    newsletter: 'Claim early drop access',
+    footerNote: 'Fashion-forward commerce for footwear, streetwear, and limited releases.',
+  },
+  Mayfair: {
+    brand: 'Atelier Mayfair',
+    eyebrow: 'Quiet luxury for considered interiors',
+    headline: 'Objects with the restraint of a private gallery.',
+    subhead:
+      'Atelier Mayfair presents lighting, textiles, and decor in an understated storefront shaped by editorial calm and premium detail.',
+    cta: 'View the collection',
+    announcement: 'Private client preview: complimentary styling notes on orders over $400.',
+    nav: ['Objects', 'Rooms', 'Atelier', 'Concierge'],
+    products: [
+      ['Travertine Table Lamp', '$420', 'A softened stone profile with linen shade and brass switch.'],
+      ['Cashmere Throw', '$310', 'A finely woven layer finished with hand-rolled edges.'],
+      ['Bronze Catchall', '$185', 'Weighted valet tray with a dark patinated surface.'],
+    ],
+    collections: ['Lighting', 'Textiles', 'Table objects', 'Private edit'],
+    features: [
+      ['Editorial restraint', 'Measured typography and quiet image layouts make premium products feel deliberate.'],
+      ['Concierge cues', 'Soft newsletter and story modules invite longer, higher-value relationships.'],
+      ['Material trust', 'Product notes emphasize provenance, scale, and care.'],
+      ['Polished navigation', 'Sticky controls and refined collection tiles keep the experience elegant.'],
+    ],
+    testimonials: [
+      ['Maribel H.', 'The storefront feels collected and expensive without shouting.'],
+      ['House of Vale', 'Our product stories finally have the space and polish they deserve.'],
+      ['C. Laurent', 'It gave clients enough detail to buy confidently online.'],
+    ],
+    storyTitle: 'Luxury merchandising with room to breathe',
+    story:
+      'The Mayfair-inspired design uses restrained contrast, refined accents, and generous editorial sections. It is built for considered purchases where trust grows through composition.',
+    newsletter: 'Request the private edit',
+    footerNote: 'Premium ecommerce language for interiors, objects, and client-led retail.',
+  },
+};
+
+function getProfile(theme) {
+  return profiles[theme.name] || profiles.Mayfair;
+}
+
+function getImages(theme) {
+  return imageSets[theme.name] || imageSets.Mayfair;
+}
+
+function renderIndex(theme) {
+  const profile = getProfile(theme);
+  const images = getImages(theme);
+  const slug = slugify(theme.name);
+  const sections = new Set(theme.layout_sections);
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(profile.brand)} | ${escapeHtml(theme.mood)}</title>
+  <meta name="description" content="${escapeHtml(profile.subhead)}">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="site site-${slug}" data-theme="${escapeHtml(theme.name)}">
+  ${sections.has('announcement-bar') ? `<div class="announcement-bar" data-section="announcement-bar">${escapeHtml(profile.announcement)}</div>` : ''}
+  <header class="site-header" data-section="sticky-nav">
+    <a class="brand-mark" href="#hero" aria-label="${escapeHtml(profile.brand)} home">
+      <span class="brand-symbol">${escapeHtml(profile.brand.slice(0, 2).toUpperCase())}</span>
+      <span>${escapeHtml(profile.brand)}</span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
+      ${profile.nav.map((item) => `<a href="#${slugify(item)}">${escapeHtml(item)}</a>`).join('\n      ')}
+    </nav>
+    <button class="cart-button" type="button" data-cart-open>Cart <span class="cart-count">0</span></button>
+  </header>
+
+  <main>
+    ${sections.has('hero-fullscreen') || sections.has('hero') ? renderHero(profile, images) : ''}
+    ${sections.has('features') || sections.has('selling-points') ? renderFeatures(profile) : ''}
+    ${sections.has('product-grid') || sections.has('featured-collection') ? renderProducts(profile, images) : ''}
+    ${sections.has('collection-list') ? renderCollections(profile, images) : ''}
+    ${sections.has('brand-story') || sections.has('about') ? renderBrandStory(profile, images) : ''}
+    ${sections.has('lookbook') ? renderLookbook(profile, images) : ''}
+    ${sections.has('editorial') ? renderEditorial(profile, images) : ''}
+    ${sections.has('testimonials') ? renderTestimonials(profile) : ''}
+    ${sections.has('newsletter') ? renderNewsletter(profile) : ''}
+  </main>
+
+  ${sections.has('footer') ? renderFooter(profile, theme) : ''}
+
+  <aside class="quick-view" aria-hidden="true" aria-labelledby="quick-view-title">
+    <div class="quick-view__panel">
+      <button class="icon-close" type="button" data-close-quick-view>Close</button>
+      <p class="eyebrow">Quick view</p>
+      <h2 id="quick-view-title">${escapeHtml(profile.products[0][0])}</h2>
+      <p data-quick-view-copy>${escapeHtml(profile.products[0][2])}</p>
+      <div class="swatch-row" aria-label="Finish options">
+        <button type="button" class="swatch is-selected" data-swatch="#111111" aria-label="Deep finish"></button>
+        <button type="button" class="swatch" data-swatch="#d9c9a8" aria-label="Warm finish"></button>
+        <button type="button" class="swatch" data-swatch="#f2f2f2" aria-label="Light finish"></button>
+      </div>
+      <button class="button-primary" type="button" data-cart-add>Add to cart</button>
+    </div>
+  </aside>
+
+  <aside class="cart-drawer" aria-hidden="true" aria-labelledby="cart-title">
+    <div class="cart-drawer__panel">
+      <button class="icon-close" type="button" data-cart-close>Close</button>
+      <h2 id="cart-title">Studio cart</h2>
+      <p class="cart-copy">Your selected edit is ready for review. Add two more pieces to unlock the curated bundle benefit.</p>
+      <button class="button-primary" type="button">Review checkout</button>
+    </div>
+  </aside>
+
+  <button class="back-to-top" type="button" aria-label="Back to top">Top</button>
+  <div class="promo-popup" role="dialog" aria-hidden="true" aria-label="Private offer">
+    <button type="button" data-close-promo>Close</button>
+    <strong>${escapeHtml(profile.newsletter)}</strong>
+    <span>Join today for priority edits and launch reminders.</span>
+  </div>
+
+  <script src="./main.js"></script>
+</body>
+</html>
+`;
+}
+
+function renderHero(profile, images) {
+  return `<section id="hero" class="hero" data-section="hero-fullscreen" style="--hero-image: url('${images.hero}')">
+      <div class="hero__media" aria-hidden="true"></div>
+      <div class="hero__content">
+        <p class="eyebrow">${escapeHtml(profile.eyebrow)}</p>
+        <h1>${escapeHtml(profile.headline)}</h1>
+        <p class="hero__subhead">${escapeHtml(profile.subhead)}</p>
+        <div class="hero__actions">
+          <a class="button-primary" href="#products">${escapeHtml(profile.cta)}</a>
+          <a class="button-secondary" href="#story">Read the story</a>
+        </div>
+      </div>
+      <div class="hero__metrics" aria-label="Store highlights">
+        <span><strong>05</strong> curated edits</span>
+        <span><strong>24h</strong> launch support</span>
+        <span><strong>4.9</strong> client rating</span>
+      </div>
+    </section>`;
+}
+
+function renderFeatures(profile) {
+  return `<section id="features" class="features section-shell" data-section="features">
+      <div class="section-heading">
+        <p class="eyebrow">What shoppers feel</p>
+        <h2>Commercial detail with a distinct point of view.</h2>
+      </div>
+      <div class="feature-grid">
+        ${profile.features
+          .map(
+            ([title, copy], index) => `<article class="feature-item">
+          <span class="feature-number">0${index + 1}</span>
+          <h3>${escapeHtml(title)}</h3>
+          <p>${escapeHtml(copy)}</p>
+        </article>`,
+          )
+          .join('\n        ')}
+      </div>
+    </section>`;
+}
+
+function renderProducts(profile, images) {
+  return `<section id="products" class="products section-shell" data-section="product-grid">
+      <div class="section-heading">
+        <p class="eyebrow">Featured collection</p>
+        <h2>Three hero products with enough detail to buy confidently.</h2>
+      </div>
+      <div class="product-grid">
+        ${profile.products
+          .map(
+            ([name, price, copy], index) => `<article class="product-card" data-product-card>
+          <button class="product-card__image" type="button" data-open-quick-view data-product="${escapeHtml(name)}" data-copy="${escapeHtml(copy)}">
+            <img src="${images.products[index]}" alt="${escapeHtml(name)}">
+          </button>
+          <div class="product-card__content">
+            <h3>${escapeHtml(name)}</h3>
+            <p>${escapeHtml(copy)}</p>
+            <div class="product-card__meta">
+              <span>${escapeHtml(price)}</span>
+              <button type="button" data-cart-add>Add</button>
+            </div>
+          </div>
+        </article>`,
+          )
+          .join('\n        ')}
+      </div>
+    </section>`;
+}
+
+function renderCollections(profile, images) {
+  return `<section id="collections" class="collections section-shell" data-section="collection-list">
+      <div class="section-heading section-heading--inline">
+        <div>
+          <p class="eyebrow">Collection list</p>
+          <h2>Shop by use case, material, or release mood.</h2>
+        </div>
+        <a href="#newsletter">Request an edit</a>
+      </div>
+      <div class="collection-rail">
+        ${profile.collections
+          .map(
+            (collection, index) => `<article class="collection-tile" style="--tile-image: url('${images.editorial[index % images.editorial.length]}')">
+          <span>0${index + 1}</span>
+          <h3>${escapeHtml(collection)}</h3>
+          <p>Curated merchandising blocks keep browsing focused without flattening the brand.</p>
+        </article>`,
+          )
+          .join('\n        ')}
+      </div>
+    </section>`;
+}
+
+function renderBrandStory(profile, images) {
+  return `<section id="story" class="story section-shell" data-section="brand-story">
+      <div class="story__image">
+        <img src="${images.story}" alt="${escapeHtml(profile.storyTitle)}">
+      </div>
+      <div class="story__content">
+        <p class="eyebrow">Brand story</p>
+        <h2>${escapeHtml(profile.storyTitle)}</h2>
+        <p>${escapeHtml(profile.story)}</p>
+        <dl class="story-stats">
+          <div><dt>Sections</dt><dd>12</dd></div>
+          <div><dt>Patterns</dt><dd>Live</dd></div>
+          <div><dt>Format</dt><dd>Static</dd></div>
+        </dl>
+      </div>
+    </section>`;
+}
+
+function renderLookbook(profile, images) {
+  return `<section id="lookbook" class="lookbook" data-section="lookbook">
+      <div class="lookbook__headline">
+        <p class="eyebrow">Lookbook</p>
+        <h2>Full-width imagery sets the emotional temperature.</h2>
+      </div>
+      <div class="lookbook-grid">
+        ${images.editorial
+          .map(
+            (image, index) => `<figure class="lookbook-frame">
+          <img src="${image}" alt="${escapeHtml(profile.collections[index % profile.collections.length])}">
+          <figcaption>${escapeHtml(profile.collections[index % profile.collections.length])}</figcaption>
+        </figure>`,
+          )
+          .join('\n        ')}
+      </div>
+    </section>`;
+}
+
+function renderEditorial(profile, images) {
+  return `<section id="editorial" class="editorial section-shell" data-section="editorial">
+      <article class="editorial-feature">
+        <p class="eyebrow">Editorial note</p>
+        <h2>Designed to feel like a launch story, not a flat catalog.</h2>
+        <p>${escapeHtml(profile.story)} The result is a standalone storefront that borrows the design language, not the code, of a premium Shopify demo.</p>
+      </article>
+      <div class="before-after" data-before-after>
+        <img src="${images.editorial[0]}" alt="Before frame">
+        <div class="before-after__overlay">
+          <img src="${images.editorial[1]}" alt="After frame">
+        </div>
+        <input type="range" min="20" max="80" value="55" aria-label="Compare editorial crops">
+      </div>
+    </section>`;
+}
+
+function renderTestimonials(profile) {
+  return `<section id="testimonials" class="testimonials section-shell" data-section="testimonials">
+      <div class="section-heading">
+        <p class="eyebrow">Customer proof</p>
+        <h2>Signals that make the store feel lived-in and commercially ready.</h2>
+      </div>
+      <div class="testimonial-grid">
+        ${profile.testimonials
+          .map(
+            ([name, quote]) => `<figure class="testimonial-card">
+          <blockquote>${escapeHtml(quote)}</blockquote>
+          <figcaption>
+            <span>${escapeHtml(name)}</span>
+            <small>5 star review</small>
+          </figcaption>
+        </figure>`,
+          )
+          .join('\n        ')}
+      </div>
+    </section>`;
+}
+
+function renderNewsletter(profile) {
+  return `<section id="newsletter" class="newsletter section-shell" data-section="newsletter">
+      <div>
+        <p class="eyebrow">Newsletter</p>
+        <h2>${escapeHtml(profile.newsletter)}</h2>
+        <p>Receive launch notes, product edits, and quiet reminders when the next collection goes live.</p>
+      </div>
+      <form class="newsletter-form">
+        <label for="email-${slugify(profile.brand)}">Email address</label>
+        <input id="email-${slugify(profile.brand)}" type="email" autocomplete="email" required>
+        <button class="button-primary" type="submit">Join</button>
+      </form>
+    </section>`;
+}
+
+function renderFooter(profile, theme) {
+  return `<footer class="site-footer" data-section="footer">
+      <div>
+        <a class="brand-mark" href="#hero">
+          <span class="brand-symbol">${escapeHtml(profile.brand.slice(0, 2).toUpperCase())}</span>
+          <span>${escapeHtml(profile.brand)}</span>
+        </a>
+        <p>${escapeHtml(profile.footerNote)}</p>
+      </div>
+      <div class="footer-links">
+        <a href="#products">Products</a>
+        <a href="#collections">Collections</a>
+        <a href="#story">Story</a>
+        <a href="#newsletter">Contact</a>
+      </div>
+      <div class="footer-meta">
+        <span>Inspired by ${escapeHtml(theme.name)} design analysis.</span>
+        <span>Static HTML, CSS, and JavaScript.</span>
+      </div>
+    </footer>`;
+}
+
+function renderCss(theme) {
+  const slug = slugify(theme.name);
+  const headingFont = escapeHtml(theme.typography.heading_font);
+  const bodyFont = escapeHtml(theme.typography.body_font);
+  const isDark = theme.colors.background.toLowerCase() === '#000000';
+
+  return `${fontImport(theme)}
+
+:root {
+  --color-primary: ${theme.colors.primary};
+  --color-secondary: ${theme.colors.secondary};
+  --color-accent: ${theme.colors.accent};
+  --color-text: ${theme.colors.text};
+  --color-bg: ${theme.colors.background};
+  --font-heading: "${headingFont}", serif;
+  --font-body: "${bodyFont}", sans-serif;
+  --base-size: ${theme.typography.base_size || '16px'};
+  --heading-weight: ${theme.typography.heading_weight || '700'};
+  --surface: ${isDark ? '#111111' : '#ffffff'};
+  --surface-muted: ${isDark ? '#171717' : '#f7f6f2'};
+  --on-primary: ${textOn(theme.colors.primary)};
+  --on-accent: ${textOn(theme.colors.accent)};
+  --line: color-mix(in srgb, var(--color-text), transparent 78%);
+  --shadow: 0 18px 55px rgba(0, 0, 0, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--base-size);
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+h1 {
+  max-width: 11ch;
+  font-size: clamp(3.2rem, 12vw, 7.6rem);
+  margin-bottom: 1.3rem;
+}
+
+h2 {
+  font-size: clamp(2rem, 6vw, 4.8rem);
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.65rem;
+}
+
+.announcement-bar {
+  min-height: 36px;
+  display: grid;
+  place-items: center;
+  padding: 0.45rem 1rem;
+  color: var(--on-accent);
+  background: var(--color-accent);
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.75rem;
+  align-items: center;
+  min-height: 72px;
+  padding: 0.8rem clamp(1rem, 4vw, 3rem);
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--color-bg), transparent 6%);
+  backdrop-filter: blur(18px);
+  transition: min-height 240ms ease, box-shadow 240ms ease, background 240ms ease;
+}
+
+.site-header.is-scrolled {
+  min-height: 58px;
+  box-shadow: var(--shadow);
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.brand-symbol {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid currentColor;
+  background: var(--color-primary);
+  color: var(--on-primary);
+  font-size: 0.75rem;
+}
+
+.menu-toggle {
+  display: inline-grid;
+  gap: 4px;
+  width: 42px;
+  height: 42px;
+  place-content: center;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: inherit;
+}
+
+.menu-toggle span {
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+}
+
+.primary-nav {
+  position: fixed;
+  inset: 108px 1rem auto 1rem;
+  display: none;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.primary-nav.is-open {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.primary-nav a {
+  padding: 0.35rem 0;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.primary-nav a:hover {
+  color: var(--color-accent);
+  transform: translateX(4px);
+}
+
+.cart-button,
+.button-primary,
+.button-secondary,
+.product-card__meta button,
+.icon-close,
+.back-to-top,
+.newsletter-form button {
+  min-height: 42px;
+  border: 1px solid var(--color-primary);
+  padding: 0.75rem 1rem;
+  border-radius: 0;
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.button-primary,
+.cart-button,
+.product-card__meta button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--on-primary);
+  background: var(--color-primary);
+}
+
+.button-primary:hover,
+.cart-button:hover,
+.product-card__meta button:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+}
+
+.button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: inherit;
+}
+
+.button-secondary:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.hero {
+  position: relative;
+  min-height: calc(100vh - 36px);
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  color: #ffffff;
+  background: #111111;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, rgba(0,0,0,0.72), rgba(0,0,0,0.16)), var(--hero-image);
+  background-size: cover;
+  background-position: center;
+  transform: translate3d(0, var(--parallax-offset, 0), 0) scale(1.04);
+  transition: transform 120ms linear;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 980px);
+  padding: clamp(6rem, 16vw, 14rem) clamp(1rem, 6vw, 5rem) clamp(3rem, 8vw, 6rem);
+}
+
+.hero__subhead {
+  max-width: 620px;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.8rem;
+}
+
+.hero__metrics {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(255,255,255,0.24);
+  background: rgba(0,0,0,0.28);
+}
+
+.hero__metrics span {
+  display: grid;
+  gap: 0.1rem;
+  padding: 1rem;
+  border-right: 1px solid rgba(255,255,255,0.18);
+}
+
+.hero__metrics strong {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+}
+
+.section-shell {
+  padding: clamp(4rem, 8vw, 8rem) clamp(1rem, 5vw, 4rem);
+}
+
+.section-heading {
+  max-width: 760px;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+.section-heading--inline {
+  display: grid;
+  gap: 1rem;
+  max-width: none;
+}
+
+.section-heading--inline a {
+  align-self: end;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.eyebrow {
+  margin-bottom: 0.8rem;
+  color: var(--color-accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.feature-grid,
+.product-grid,
+.testimonial-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.feature-item,
+.product-card,
+.testimonial-card,
+.collection-tile {
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.feature-item {
+  padding: 1.3rem;
+}
+
+.feature-number {
+  display: inline-block;
+  margin-bottom: 2.5rem;
+  color: var(--color-accent);
+  font-weight: 800;
+}
+
+.product-card {
+  display: grid;
+  overflow: hidden;
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.product-card:hover,
+.product-card.is-hovered {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow);
+  border-color: var(--color-accent);
+}
+
+.product-card__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: 0;
+  background: var(--surface-muted);
+  overflow: hidden;
+}
+
+.product-card__image img,
+.lookbook-frame img,
+.collection-tile::before {
+  transition: transform 500ms ease;
+}
+
+.product-card:hover img,
+.product-card.is-hovered img,
+.lookbook-frame:hover img {
+  transform: scale(1.06);
+}
+
+.product-card__content {
+  display: grid;
+  gap: 1rem;
+  padding: 1.1rem;
+}
+
+.product-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.product-card__meta span {
+  font-weight: 800;
+}
+
+.collections {
+  background: var(--surface-muted);
+}
+
+.collection-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(260px, 36vw);
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scroll-snap-type: x mandatory;
+}
+
+.collection-tile {
+  position: relative;
+  min-height: 340px;
+  display: grid;
+  align-content: end;
+  gap: 0.7rem;
+  padding: 1rem;
+  overflow: hidden;
+  color: #ffffff;
+  scroll-snap-align: start;
+}
+
+.collection-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(180deg, transparent, rgba(0,0,0,0.78)), var(--tile-image);
+  background-size: cover;
+  background-position: center;
+}
+
+.collection-tile:hover::before {
+  transform: scale(1.05);
+}
+
+.collection-tile > * {
+  position: relative;
+  z-index: 1;
+}
+
+.story {
+  display: grid;
+  gap: 2rem;
+  background: var(--color-secondary);
+  color: ${isDark ? '#111111' : 'var(--color-text)'};
+}
+
+.story__image {
+  min-height: 420px;
+  overflow: hidden;
+}
+
+.story__content {
+  align-self: center;
+}
+
+.story-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin: 2rem 0 0;
+}
+
+.story-stats div {
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, currentColor, transparent 78%);
+}
+
+.story-stats dt {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.story-stats dd {
+  margin: 0.2rem 0 0;
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+}
+
+.lookbook {
+  padding: clamp(4rem, 8vw, 8rem) 0;
+}
+
+.lookbook__headline {
+  padding: 0 clamp(1rem, 5vw, 4rem);
+  max-width: 840px;
+  margin-bottom: 2rem;
+}
+
+.lookbook-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.lookbook-frame {
+  position: relative;
+  min-height: 420px;
+  margin: 0;
+  overflow: hidden;
+  background: var(--surface-muted);
+}
+
+.lookbook-frame figcaption {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  padding: 0.45rem 0.7rem;
+  background: rgba(0,0,0,0.68);
+  color: #ffffff;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.editorial {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+.editorial-feature {
+  max-width: 720px;
+}
+
+.before-after {
+  position: relative;
+  min-height: 480px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.before-after__overlay {
+  position: absolute;
+  inset: 0;
+  width: var(--compare-width, 55%);
+  overflow: hidden;
+  border-right: 2px solid var(--color-accent);
+}
+
+.before-after__overlay img {
+  width: calc(100vw - 2rem);
+  max-width: none;
+}
+
+.before-after input {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  width: calc(100% - 2rem);
+  accent-color: var(--color-accent);
+}
+
+.testimonial-card {
+  margin: 0;
+  padding: 1.2rem;
+}
+
+.testimonial-card blockquote {
+  margin: 0 0 2rem;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  line-height: 1.22;
+}
+
+.testimonial-card figcaption {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.testimonial-card small {
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+
+.newsletter {
+  display: grid;
+  gap: 2rem;
+  background: var(--color-primary);
+  color: var(--on-primary);
+}
+
+.newsletter p {
+  max-width: 560px;
+}
+
+.newsletter-form {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.newsletter-form label {
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.newsletter-form input {
+  min-height: 54px;
+  width: 100%;
+  border: 1px solid rgba(255,255,255,0.35);
+  padding: 0 1rem;
+  background: rgba(255,255,255,0.08);
+  color: inherit;
+}
+
+.site-footer {
+  display: grid;
+  gap: 2rem;
+  padding: clamp(3rem, 7vw, 6rem) clamp(1rem, 5vw, 4rem);
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.site-footer p {
+  max-width: 420px;
+  margin-top: 1rem;
+}
+
+.footer-links,
+.footer-meta {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.footer-links a:hover {
+  color: var(--color-accent);
+}
+
+.quick-view,
+.cart-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: none;
+  justify-content: end;
+  background: rgba(0,0,0,0.52);
+}
+
+.quick-view.is-open,
+.cart-drawer.is-open {
+  display: flex;
+}
+
+.quick-view__panel,
+.cart-drawer__panel {
+  width: min(100%, 440px);
+  min-height: 100%;
+  padding: 1.4rem;
+  background: var(--surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow);
+}
+
+.icon-close {
+  margin-bottom: 2rem;
+  background: transparent;
+  color: inherit;
+}
+
+.swatch-row {
+  display: flex;
+  gap: 0.6rem;
+  margin: 1.5rem 0;
+}
+
+.swatch {
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: var(--swatch-color, #111111);
+}
+
+.swatch.is-selected {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent), transparent 76%);
+}
+
+.back-to-top {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 30;
+  display: none;
+  background: var(--surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow);
+}
+
+.back-to-top.is-visible {
+  display: inline-flex;
+}
+
+.promo-popup {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 35;
+  display: none;
+  max-width: 320px;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow);
+}
+
+.promo-popup.is-open {
+  display: grid;
+}
+
+.promo-popup button {
+  justify-self: start;
+  border: 0;
+  background: transparent;
+  color: var(--color-accent);
+  padding: 0;
+}
+
+.site-throne {
+  --surface-muted: #151a20;
+}
+
+.site-throne .hero__media {
+  filter: saturate(1.1) contrast(1.18);
+}
+
+.site-throne .feature-item {
+  background: linear-gradient(135deg, var(--surface), color-mix(in srgb, var(--color-accent), transparent 90%));
+}
+
+.site-meadow .brand-symbol,
+.site-mayfair .brand-symbol {
+  border-radius: 8px;
+}
+
+.site-meadow .product-card,
+.site-meadow .feature-item,
+.site-meadow .testimonial-card {
+  border-radius: 8px;
+}
+
+.site-maya .hero__content {
+  mix-blend-mode: normal;
+}
+
+.site-maya .feature-item:nth-child(2),
+.site-maya .feature-item:nth-child(4) {
+  background: color-mix(in srgb, var(--color-accent), white 82%);
+}
+
+.site-pace .product-grid {
+  gap: 0;
+}
+
+.site-pace .product-card {
+  border-color: rgba(255,255,255,0.22);
+}
+
+.site-mayfair .section-shell {
+  padding-left: clamp(1rem, 8vw, 7rem);
+  padding-right: clamp(1rem, 8vw, 7rem);
+}
+
+.site-mayfair h1,
+.site-mayfair h2 {
+  max-width: 12ch;
+}
+
+@media (min-width: 768px) {
+  .site-header {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+
+  .primary-nav {
+    position: static;
+    display: flex;
+    justify-content: center;
+    gap: clamp(1rem, 3vw, 2rem);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .primary-nav.is-open {
+    display: flex;
+  }
+
+  .primary-nav a:hover {
+    transform: translateY(-2px);
+  }
+
+  .feature-grid,
+  .testimonial-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .story,
+  .editorial,
+  .newsletter,
+  .site-footer {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .lookbook-grid {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+
+  .lookbook-frame:first-child {
+    grid-row: span 2;
+    min-height: 680px;
+  }
+
+  .section-heading--inline {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+}
+
+@media (min-width: 1280px) {
+  .feature-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .hero__content {
+    padding-left: 7vw;
+  }
+
+  .collection-rail {
+    grid-auto-columns: minmax(300px, 24vw);
+  }
+
+  .before-after__overlay img {
+    width: 50vw;
+  }
+}
+`;
+}
+
+function renderJs(theme) {
+  return `(() => {
+  const themeName = ${JSON.stringify(theme.name)};
+  const patterns = new Set(${JSON.stringify(theme.ui_patterns)});
+  const header = document.querySelector('.site-header');
+  const menuToggle = document.querySelector('.menu-toggle');
+  const nav = document.querySelector('.primary-nav');
+  const heroMedia = document.querySelector('.hero__media');
+  const quickView = document.querySelector('.quick-view');
+  const quickViewTitle = document.querySelector('#quick-view-title');
+  const quickViewCopy = document.querySelector('[data-quick-view-copy]');
+  const cartDrawer = document.querySelector('.cart-drawer');
+  const cartCount = document.querySelector('.cart-count');
+  const backToTop = document.querySelector('.back-to-top');
+  const promo = document.querySelector('.promo-popup');
+  let cartItems = 0;
+
+  function setExpanded(button, expanded) {
+    if (button) button.setAttribute('aria-expanded', String(expanded));
+  }
+
+  function setOpen(panel, isOpen) {
+    if (!panel) return;
+    panel.classList.toggle('is-open', isOpen);
+    panel.setAttribute('aria-hidden', String(!isOpen));
+  }
+
+  function updateScrollStates() {
+    const isScrolled = window.scrollY > 24;
+    if (header && patterns.has('sticky-nav')) header.classList.toggle('is-scrolled', isScrolled);
+    if (backToTop) backToTop.classList.toggle('is-visible', window.scrollY > 600);
+    if (heroMedia && patterns.has('parallax-hero')) {
+      heroMedia.style.setProperty('--parallax-offset', Math.round(window.scrollY * 0.08) + 'px');
+    }
+  }
+
+  window.addEventListener('scroll', updateScrollStates, { passive: true });
+  updateScrollStates();
+
+  if (menuToggle && nav && patterns.has('mobile-menu')) {
+    menuToggle.addEventListener('click', () => {
+      const nextState = !nav.classList.contains('is-open');
+      nav.classList.toggle('is-open', nextState);
+      document.body.classList.toggle('menu-open', nextState);
+      setExpanded(menuToggle, nextState);
+    });
+  }
+
+  document.querySelectorAll('.primary-nav a').forEach((link) => {
+    link.addEventListener('click', () => {
+      nav?.classList.remove('is-open');
+      document.body.classList.remove('menu-open');
+      setExpanded(menuToggle, false);
+    });
+  });
+
+  document.querySelectorAll('[data-product-card]').forEach((card) => {
+    card.addEventListener('mouseenter', () => card.classList.add('is-hovered'));
+    card.addEventListener('mouseleave', () => card.classList.remove('is-hovered'));
+  });
+
+  document.querySelectorAll('[data-open-quick-view]').forEach((button) => {
+    button.addEventListener('click', () => {
+      if (quickViewTitle) quickViewTitle.textContent = button.dataset.product || themeName + ' selection';
+      if (quickViewCopy) quickViewCopy.textContent = button.dataset.copy || 'A focused product edit with practical buying details.';
+      setOpen(quickView, true);
+    });
+  });
+
+  document.querySelector('[data-close-quick-view]')?.addEventListener('click', () => setOpen(quickView, false));
+
+  document.querySelectorAll('[data-cart-add]').forEach((button) => {
+    button.addEventListener('click', () => {
+      cartItems += 1;
+      if (cartCount) cartCount.textContent = String(cartItems);
+      button.textContent = 'Added';
+      window.setTimeout(() => {
+        button.textContent = button.closest('.quick-view') ? 'Add to cart' : 'Add';
+      }, 1100);
+    });
+  });
+
+  document.querySelector('[data-cart-open]')?.addEventListener('click', () => setOpen(cartDrawer, true));
+  document.querySelector('[data-cart-close]')?.addEventListener('click', () => setOpen(cartDrawer, false));
+
+  document.querySelectorAll('.swatch').forEach((swatch) => {
+    swatch.style.setProperty('--swatch-color', swatch.dataset.swatch || '#111111');
+    swatch.addEventListener('click', () => {
+      document.querySelectorAll('.swatch').forEach((item) => item.classList.remove('is-selected'));
+      swatch.classList.add('is-selected');
+    });
+  });
+
+  document.querySelectorAll('[data-before-after]').forEach((compare) => {
+    const input = compare.querySelector('input[type="range"]');
+    input?.addEventListener('input', () => {
+      compare.style.setProperty('--compare-width', input.value + '%');
+    });
+  });
+
+  backToTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  if (patterns.has('promo-popup') && promo) {
+    window.setTimeout(() => {
+      promo.classList.add('is-open');
+      promo.setAttribute('aria-hidden', 'false');
+    }, 1600);
+    document.querySelector('[data-close-promo]')?.addEventListener('click', () => {
+      promo.classList.remove('is-open');
+      promo.setAttribute('aria-hidden', 'true');
+    });
+  }
+
+  if (patterns.has('countdown-timer')) {
+    const announcement = document.querySelector('.announcement-bar');
+    const endTime = Date.now() + 48 * 60 * 60 * 1000;
+    window.setInterval(() => {
+      if (!announcement) return;
+      const remaining = Math.max(0, endTime - Date.now());
+      const hours = String(Math.floor(remaining / 3600000)).padStart(2, '0');
+      const minutes = String(Math.floor((remaining % 3600000) / 60000)).padStart(2, '0');
+      announcement.dataset.timer = hours + ':' + minutes;
+    }, 30000);
+  }
+
+  if (patterns.has('infinite-scroll')) {
+    const rail = document.querySelector('.collection-rail');
+    rail?.addEventListener('scroll', () => {
+      if (rail.scrollLeft + rail.clientWidth > rail.scrollWidth - 8) rail.scrollLeft = 0;
+    }, { passive: true });
+  }
+
+  if (patterns.has('mega-menu')) {
+    document.querySelectorAll('.primary-nav a').forEach((link) => {
+      link.addEventListener('mouseenter', () => link.dataset.preview = 'open');
+      link.addEventListener('mouseleave', () => delete link.dataset.preview);
+    });
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    setOpen(quickView, false);
+    setOpen(cartDrawer, false);
+    nav?.classList.remove('is-open');
+    document.body.classList.remove('menu-open');
+    setExpanded(menuToggle, false);
+  });
+
+  document.querySelector('.newsletter-form')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const button = event.currentTarget.querySelector('button');
+    if (!button) return;
+    button.textContent = 'Joined';
+    event.currentTarget.reset();
+  });
+})();`;
+}
+
+function assertPrerequisite(themes) {
+  if (!Array.isArray(themes) || themes.length !== 5) {
+    throw new Error(`BLOCKED: Goal 1 must be completed first. Found ${Array.isArray(themes) ? themes.length : 0} theme entries, need 5.`);
+  }
+}
+
+function build() {
+  if (!fs.existsSync(analysisPath)) {
+    throw new Error('BLOCKED: design-analysis.json is missing. Goal 1 must be completed first.');
+  }
+
+  const themes = JSON.parse(fs.readFileSync(analysisPath, 'utf8'));
+  assertPrerequisite(themes);
+
+  fs.rmSync(sitesPath, { recursive: true, force: true });
+  fs.mkdirSync(sitesPath, { recursive: true });
+
+  for (const theme of themes) {
+    const slug = slugify(theme.name);
+    const dir = path.join(sitesPath, slug);
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, 'index.html'), renderIndex(theme), 'utf8');
+    fs.writeFileSync(path.join(dir, 'style.css'), renderCss(theme), 'utf8');
+    fs.writeFileSync(path.join(dir, 'main.js'), renderJs(theme), 'utf8');
+    console.log(`Built sites/${slug}`);
+  }
+}
+
+try {
+  build();
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
+}

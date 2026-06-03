@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maya Color Lab | playful / creative / image-rich</title>
+  <meta name="description" content="Maya Color Lab sells sculptural decor, playful accessories, and artful everyday pieces through a bright gallery-like storefront.">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="site site-maya" data-theme="Maya">
+  <div class="announcement-bar" data-section="announcement-bar">Limited color drops ship this Friday with complimentary gift notes.</div>
+  <header class="site-header" data-section="sticky-nav">
+    <a class="brand-mark" href="#hero" aria-label="Maya Color Lab home">
+      <span class="brand-symbol">MA</span>
+      <span>Maya Color Lab</span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
+      <a href="#drops">Drops</a>
+      <a href="#objects">Objects</a>
+      <a href="#studio">Studio</a>
+      <a href="#archive">Archive</a>
+    </nav>
+    <button class="cart-button" type="button" data-cart-open>Cart <span class="cart-count">0</span></button>
+  </header>
+
+  <main>
+    <section id="hero" class="hero" data-section="hero-fullscreen" style="--hero-image: url('https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=1600&q=80')">
+      <div class="hero__media" aria-hidden="true"></div>
+      <div class="hero__content">
+        <p class="eyebrow">Graphic objects for visually hungry homes</p>
+        <h1>Turn ordinary shelves into small exhibitions.</h1>
+        <p class="hero__subhead">Maya Color Lab sells sculptural decor, playful accessories, and artful everyday pieces through a bright gallery-like storefront.</p>
+        <div class="hero__actions">
+          <a class="button-primary" href="#products">Open the color shop</a>
+          <a class="button-secondary" href="#story">Read the story</a>
+        </div>
+      </div>
+      <div class="hero__metrics" aria-label="Store highlights">
+        <span><strong>05</strong> curated edits</span>
+        <span><strong>24h</strong> launch support</span>
+        <span><strong>4.9</strong> client rating</span>
+      </div>
+    </section>
+    <section id="features" class="features section-shell" data-section="features">
+      <div class="section-heading">
+        <p class="eyebrow">What shoppers feel</p>
+        <h2>Commercial detail with a distinct point of view.</h2>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-item">
+          <span class="feature-number">01</span>
+          <h3>Image-first rhythm</h3>
+          <p>Large visual breaks keep color and shape at the center of the shopping path.</p>
+        </article>
+        <article class="feature-item">
+          <span class="feature-number">02</span>
+          <h3>Playful conversion</h3>
+          <p>Quick-view details and animated cards make discovery feel expressive.</p>
+        </article>
+        <article class="feature-item">
+          <span class="feature-number">03</span>
+          <h3>Gallery utility</h3>
+          <p>Collections are grouped by mood so shoppers can browse like a curator.</p>
+        </article>
+        <article class="feature-item">
+          <span class="feature-number">04</span>
+          <h3>Flexible storytelling</h3>
+          <p>Editorial modules show how pieces live together in real rooms.</p>
+        </article>
+      </div>
+    </section>
+    <section id="products" class="products section-shell" data-section="product-grid">
+      <div class="section-heading">
+        <p class="eyebrow">Featured collection</p>
+        <h2>Three hero products with enough detail to buy confidently.</h2>
+      </div>
+      <div class="product-grid">
+        <article class="product-card" data-product-card>
+          <button class="product-card__image" type="button" data-open-quick-view data-product="Stack Vase Set" data-copy="Nested ceramic forms glazed in high-saturation bands.">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&q=80" alt="Stack Vase Set">
+          </button>
+          <div class="product-card__content">
+            <h3>Stack Vase Set</h3>
+            <p>Nested ceramic forms glazed in high-saturation bands.</p>
+            <div class="product-card__meta">
+              <span>$132</span>
+              <button type="button" data-cart-add>Add</button>
+            </div>
+          </div>
+        </article>
+        <article class="product-card" data-product-card>
+          <button class="product-card__image" type="button" data-open-quick-view data-product="Loop Table Lamp" data-copy="A compact lamp with a sculptural base and warm diffusion.">
+            <img src="https://images.unsplash.com/photo-1503602642458-232111445657?w=900&q=80" alt="Loop Table Lamp">
+          </button>
+          <div class="product-card__content">
+            <h3>Loop Table Lamp</h3>
+            <p>A compact lamp with a sculptural base and warm diffusion.</p>
+            <div class="product-card__meta">
+              <span>$188</span>
+              <button type="button" data-cart-add>Add</button>
+            </div>
+          </div>
+        </article>
+        <article class="product-card" data-product-card>
+          <button class="product-card__image" type="button" data-open-quick-view data-product="Pixel Serving Tray" data-copy="Graphic lacquer tray sized for coffee, keys, or display.">
+            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&q=80" alt="Pixel Serving Tray">
+          </button>
+          <div class="product-card__content">
+            <h3>Pixel Serving Tray</h3>
+            <p>Graphic lacquer tray sized for coffee, keys, or display.</p>
+            <div class="product-card__meta">
+              <span>$76</span>
+              <button type="button" data-cart-add>Add</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+    <section id="collections" class="collections section-shell" data-section="collection-list">
+      <div class="section-heading section-heading--inline">
+        <div>
+          <p class="eyebrow">Collection list</p>
+          <h2>Shop by use case, material, or release mood.</h2>
+        </div>
+        <a href="#newsletter">Request an edit</a>
+      </div>
+      <div class="collection-rail">
+        <article class="collection-tile" style="--tile-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&q=80')">
+          <span>01</span>
+          <h3>Color blocks</h3>
+          <p>Curated merchandising blocks keep browsing focused without flattening the brand.</p>
+        </article>
+        <article class="collection-tile" style="--tile-image: url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&q=80')">
+          <span>02</span>
+          <h3>Studio objects</h3>
+          <p>Curated merchandising blocks keep browsing focused without flattening the brand.</p>
+        </article>
+        <article class="collection-tile" style="--tile-image: url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&q=80')">
+          <span>03</span>
+          <h3>Giftable forms</h3>
+          <p>Curated merchandising blocks keep browsing focused without flattening the brand.</p>
+        </article>
+        <article class="collection-tile" style="--tile-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&q=80')">
+          <span>04</span>
+          <h3>Wall and shelf</h3>
+          <p>Curated merchandising blocks keep browsing focused without flattening the brand.</p>
+        </article>
+      </div>
+    </section>
+    <section id="story" class="story section-shell" data-section="brand-story">
+      <div class="story__image">
+        <img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=1200&q=80" alt="A visual catalog with a playful buying path">
+      </div>
+      <div class="story__content">
+        <p class="eyebrow">Brand story</p>
+        <h2>A visual catalog with a playful buying path</h2>
+        <p>The Maya-inspired build uses gallery spacing, animated color surfaces, and compact product logic. It is bright, but every interaction still leads toward a confident add-to-cart moment.</p>
+        <dl class="story-stats">
+          <div><dt>Sections</dt><dd>12</dd></div>
+          <div><dt>Patterns</dt><dd>Live</dd></div>
+          <div><dt>Format</dt><dd>Static</dd></div>
+        </dl>
+      </div>
+    </section>
+    <section id="lookbook" class="lookbook" data-section="lookbook">
+      <div class="lookbook__headline">
+        <p class="eyebrow">Lookbook</p>
+        <h2>Full-width imagery sets the emotional temperature.</h2>
+      </div>
+      <div class="lookbook-grid">
+        <figure class="lookbook-frame">
+          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&q=80" alt="Color blocks">
+          <figcaption>Color blocks</figcaption>
+        </figure>
+        <figure class="lookbook-frame">
+          <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&q=80" alt="Studio objects">
+          <figcaption>Studio objects</figcaption>
+        </figure>
+        <figure class="lookbook-frame">
+          <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&q=80" alt="Giftable forms">
+          <figcaption>Giftable forms</figcaption>
+        </figure>
+      </div>
+    </section>
+    <section id="editorial" class="editorial section-shell" data-section="editorial">
+      <article class="editorial-feature">
+        <p class="eyebrow">Editorial note</p>
+        <h2>Designed to feel like a launch story, not a flat catalog.</h2>
+        <p>The Maya-inspired build uses gallery spacing, animated color surfaces, and compact product logic. It is bright, but every interaction still leads toward a confident add-to-cart moment. The result is a standalone storefront that borrows the design language, not the code, of a premium Shopify demo.</p>
+      </article>
+      <div class="before-after" data-before-after>
+        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&q=80" alt="Before frame">
+        <div class="before-after__overlay">
+          <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&q=80" alt="After frame">
+        </div>
+        <input type="range" min="20" max="80" value="55" aria-label="Compare editorial crops">
+      </div>
+    </section>
+    <section id="testimonials" class="testimonials section-shell" data-section="testimonials">
+      <div class="section-heading">
+        <p class="eyebrow">Customer proof</p>
+        <h2>Signals that make the store feel lived-in and commercially ready.</h2>
+      </div>
+      <div class="testimonial-grid">
+        <figure class="testimonial-card">
+          <blockquote>The site makes our small objects feel collectible and considered.</blockquote>
+          <figcaption>
+            <span>Juno P.</span>
+            <small>5 star review</small>
+          </figcaption>
+        </figure>
+        <figure class="testimonial-card">
+          <blockquote>Customers spend longer in the lookbook and come back for each new drop.</blockquote>
+          <figcaption>
+            <span>Color House</span>
+            <small>5 star review</small>
+          </figcaption>
+        </figure>
+        <figure class="testimonial-card">
+          <blockquote>Every section has energy without becoming hard to shop.</blockquote>
+          <figcaption>
+            <span>Rae T.</span>
+            <small>5 star review</small>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+    <section id="newsletter" class="newsletter section-shell" data-section="newsletter">
+      <div>
+        <p class="eyebrow">Newsletter</p>
+        <h2>Join the color drop list</h2>
+        <p>Receive launch notes, product edits, and quiet reminders when the next collection goes live.</p>
+      </div>
+      <form class="newsletter-form">
+        <label for="email-maya-color-lab">Email address</label>
+        <input id="email-maya-color-lab" type="email" autocomplete="email" required>
+        <button class="button-primary" type="submit">Join</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-section="footer">
+      <div>
+        <a class="brand-mark" href="#hero">
+          <span class="brand-symbol">MA</span>
+          <span>Maya Color Lab</span>
+        </a>
+        <p>Expressive storefront patterns for artful products and design-led brands.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#products">Products</a>
+        <a href="#collections">Collections</a>
+        <a href="#story">Story</a>
+        <a href="#newsletter">Contact</a>
+      </div>
+      <div class="footer-meta">
+        <span>Inspired by Maya design analysis.</span>
+        <span>Static HTML, CSS, and JavaScript.</span>
+      </div>
+    </footer>
+
+  <aside class="quick-view" aria-hidden="true" aria-labelledby="quick-view-title">
+    <div class="quick-view__panel">
+      <button class="icon-close" type="button" data-close-quick-view>Close</button>
+      <p class="eyebrow">Quick view</p>
+      <h2 id="quick-view-title">Stack Vase Set</h2>
+      <p data-quick-view-copy>Nested ceramic forms glazed in high-saturation bands.</p>
+      <div class="swatch-row" aria-label="Finish options">
+        <button type="button" class="swatch is-selected" data-swatch="#111111" aria-label="Deep finish"></button>
+        <button type="button" class="swatch" data-swatch="#d9c9a8" aria-label="Warm finish"></button>
+        <button type="button" class="swatch" data-swatch="#f2f2f2" aria-label="Light finish"></button>
+      </div>
+      <button class="button-primary" type="button" data-cart-add>Add to cart</button>
+    </div>
+  </aside>
+
+  <aside class="cart-drawer" aria-hidden="true" aria-labelledby="cart-title">
+    <div class="cart-drawer__panel">
+      <button class="icon-close" type="button" data-cart-close>Close</button>
+      <h2 id="cart-title">Studio cart</h2>
+      <p class="cart-copy">Your selected edit is ready for review. Add two more pieces to unlock the curated bundle benefit.</p>
+      <button class="button-primary" type="button">Review checkout</button>
+    </div>
+  </aside>
+
+  <button class="back-to-top" type="button" aria-label="Back to top">Top</button>
+  <div class="promo-popup" role="dialog" aria-hidden="true" aria-label="Private offer">
+    <button type="button" data-close-promo>Close</button>
+    <strong>Join the color drop list</strong>
+    <span>Join today for priority edits and launch reminders.</span>
+  </div>
+
+  <script src="./main.js"></script>
+</body>
+</html>
