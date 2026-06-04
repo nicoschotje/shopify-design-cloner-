@@ -1,6 +1,6 @@
 (() => {
-  const themeName = "Deck";
-  const patterns = new Set(["mobile-menu","hover-zoom-cards","sticky-nav","mega-menu","quick-view","infinite-scroll","countdown-timer","parallax-hero","slide-out-cart","swatch-filters","back-to-top","before-after-slider","promo-popup"]);
+  const themeName = "Impulse";
+  const patterns = new Set(["mobile-menu","hover-zoom-cards","sticky-nav","mega-menu","quick-view","countdown-timer","parallax-hero","slide-out-cart","swatch-filters","before-after-slider","promo-popup"]);
   const header = document.querySelector('.site-header');
   const menuToggle = document.querySelector('.menu-toggle');
   const nav = document.querySelector('.primary-nav');

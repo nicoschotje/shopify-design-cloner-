@@ -5,9 +5,52 @@ import { chromium } from 'playwright';
 const SHOPIFY_THEMES_URL = 'https://themes.shopify.com/themes';
 const OUTPUT_PATH = path.resolve('design-analysis.json');
 const SYSTEM_CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const THEME_COUNT = Number(process.env.THEME_COUNT || 10);
-const MIN_THEME_PRICE = Number(process.env.MIN_THEME_PRICE || 500);
-const MAX_THEME_PRICE = Number(process.env.MAX_THEME_PRICE || 1000);
+const BLUEPRINT_PRESET_CARDS = [
+  {
+    text: 'Meadow $500 100%',
+    href: 'https://themes.shopify.com/themes/taiga/presets/meadow',
+  },
+  {
+    text: 'Taiga $500 100%',
+    href: 'https://themes.shopify.com/themes/taiga/presets/taiga',
+  },
+  {
+    text: 'Pace $500 98%',
+    href: 'https://themes.shopify.com/themes/xclusive/presets/pace',
+  },
+  {
+    text: 'Noor $500 87%',
+    href: 'https://themes.shopify.com/themes/king/presets/noor',
+  },
+  {
+    text: 'Bubbly $500 100%',
+    href: 'https://themes.shopify.com/themes/taiga/presets/bubbly',
+  },
+  {
+    text: 'Impulse $450 94%',
+    href: 'https://themes.shopify.com/themes/impulse/presets/impulse',
+  },
+  {
+    text: 'Motion $420 97%',
+    href: 'https://themes.shopify.com/themes/motion/presets/motion',
+  },
+  {
+    text: 'Seventh $420 100%',
+    href: 'https://themes.shopify.com/themes/seventh/presets/seventh',
+  },
+  {
+    text: 'Sleek $350 100%',
+    href: 'https://themes.shopify.com/themes/sleek/presets/sleek',
+  },
+  {
+    text: 'Glint $350 100%',
+    href: 'https://themes.shopify.com/themes/sleek/presets/glint',
+  },
+];
+const THEME_COUNT = Number(process.env.THEME_COUNT || BLUEPRINT_PRESET_CARDS.length);
+const MIN_THEME_PRICE = Number(process.env.MIN_THEME_PRICE || 350);
+const MAX_THEME_PRICE = Number(process.env.MAX_THEME_PRICE || 500);
+const SCRAPE_MODE = process.env.SCRAPE_MODE || 'blueprint';
 
 function getLaunchOptions() {
   const executablePath =
@@ -101,6 +144,16 @@ async function getTopPremiumPresetCards(page) {
   }
 
   return getTopThemePresets(cards).slice(0, THEME_COUNT);
+}
+
+function getCuratedBlueprintPresetCards() {
+  return BLUEPRINT_PRESET_CARDS.map((card, index) => ({
+    ...card,
+    href: absoluteUrl(card.href),
+    price: extractPrice(card.text),
+    order: index,
+    presetKey: extractPresetKey(card.href),
+  })).slice(0, THEME_COUNT);
 }
 
 function extractPresetKey(href) {
@@ -485,6 +538,11 @@ function inferMood(name, bodyText, featureLines) {
   if (/voyage/.test(nameKey)) return 'travel / technical / lifestyle';
   if (/king/.test(nameKey)) return 'bold / technical / conversion-focused';
   if (/bubbly/.test(nameKey)) return 'playful / colorful / fashion-lifestyle';
+  if (/impulse/.test(nameKey)) return 'proven / versatile / fashion-commerce';
+  if (/motion/.test(nameKey)) return 'animated / video-led / dynamic';
+  if (/seventh/.test(nameKey)) return 'clean / modern / refined';
+  if (/sleek/.test(nameKey)) return 'minimal / value-rich / polished';
+  if (/glint/.test(nameKey)) return 'bright / elegant / best-value';
 
   const all = `${name} ${featureLines.join(' ')}`.toLowerCase();
 
@@ -570,7 +628,7 @@ async function main() {
   });
 
   try {
-    const cards = await getTopPremiumPresetCards(page);
+    const cards = SCRAPE_MODE === 'price' ? await getTopPremiumPresetCards(page) : getCuratedBlueprintPresetCards();
     if (cards.length < THEME_COUNT) {
       throw new Error(`Found only ${cards.length} premium presets priced $${MIN_THEME_PRICE}-$${MAX_THEME_PRICE}; need ${THEME_COUNT}`);
     }
@@ -592,7 +650,7 @@ async function main() {
     }
 
     fs.writeFileSync(OUTPUT_PATH, `${JSON.stringify(themes, null, 2)}\n`, 'utf8');
-    console.log(`\nTop premium Shopify presets priced $${MIN_THEME_PRICE}-$${MAX_THEME_PRICE}:`);
+    console.log(`\n${SCRAPE_MODE === 'price' ? 'Top' : 'Curated blueprint'} premium Shopify presets priced $${MIN_THEME_PRICE}-$${MAX_THEME_PRICE}:`);
     for (const theme of themes) {
       console.log(`${theme.rank}. ${theme.name} - $${theme.price}`);
     }

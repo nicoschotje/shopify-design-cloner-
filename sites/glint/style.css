@@ -1,19 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700;800&family=Instrument+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --color-primary: #000000;
-  --color-secondary: #ededee;
-  --color-accent: #acfc6d;
-  --color-text: #191919;
-  --color-bg: #ffffff;
-  --font-heading: "Roboto Condensed", serif;
-  --font-body: "Instrument Sans", sans-serif;
-  --base-size: calc(1.0 * 16px);
-  --heading-weight: 700;
+  --color-primary: #559b60;
+  --color-secondary: #f4f4f4;
+  --color-accent: #007aff;
+  --color-text: #111111;
+  --color-bg: #ece8db;
+  --font-heading: "Archivo", serif;
+  --font-body: "Archivo", sans-serif;
+  --base-size: 15px;
+  --heading-weight: 500;
   --surface: #ffffff;
   --surface-muted: #f7f6f2;
   --on-primary: #ffffff;
-  --on-accent: #111111;
+  --on-accent: #ffffff;
   --line: color-mix(in srgb, var(--color-text), transparent 78%);
   --shadow: 0 18px 55px rgba(0, 0, 0, 0.12);
 }
@@ -838,6 +838,58 @@ h3 {
 .site-bubbly .feature-item:nth-child(odd) {
   background: color-mix(in srgb, var(--color-accent), white 78%);
   color: #111111;
+}
+
+.site-impulse .product-grid,
+.site-motion .product-grid {
+  gap: 0;
+}
+
+.site-impulse .product-card,
+.site-motion .product-card {
+  border-radius: 0;
+}
+
+.site-impulse .announcement-bar {
+  background: var(--color-primary);
+  color: var(--on-primary);
+}
+
+.site-motion .hero__media {
+  filter: saturate(1.2) contrast(1.08);
+}
+
+.site-motion .lookbook-grid {
+  transform: skewY(-1deg);
+}
+
+.site-motion .lookbook-frame {
+  transform: skewY(1deg);
+}
+
+.site-seventh .section-shell {
+  max-width: 1180px;
+}
+
+.site-seventh .product-card,
+.site-seventh .feature-item,
+.site-seventh .testimonial-card {
+  border-radius: 4px;
+}
+
+.site-sleek .hero__content,
+.site-glint .hero__content {
+  width: min(100%, 1040px);
+}
+
+.site-sleek .brand-symbol,
+.site-glint .brand-symbol {
+  border-radius: 8px;
+}
+
+.site-glint .newsletter,
+.site-glint .feature-item:nth-child(2) {
+  background: color-mix(in srgb, var(--color-accent), #ffffff 72%);
 }
 
 .site-voyage .story,

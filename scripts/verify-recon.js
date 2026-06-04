@@ -3,6 +3,8 @@ import path from 'node:path';
 
 const analysisPath = path.resolve('design-analysis.json');
 const EXPECTED_THEME_COUNT = Number(process.env.THEME_COUNT || 10);
+const MIN_THEME_PRICE = Number(process.env.MIN_THEME_PRICE || 350);
+const MAX_THEME_PRICE = Number(process.env.MAX_THEME_PRICE || 500);
 
 function fail(message) {
   console.error(`Recon verify failed: ${message}`);
@@ -43,6 +45,10 @@ themes.forEach((theme, index) => {
 
   if (typeof theme.price !== 'number' || theme.price <= 0) {
     fail(`${label}: price must be a number > 0`);
+  }
+
+  if (theme.price < MIN_THEME_PRICE || theme.price > MAX_THEME_PRICE) {
+    fail(`${label}: price must be within $${MIN_THEME_PRICE}-$${MAX_THEME_PRICE}`);
   }
 
   if (!theme.shopify_url || typeof theme.shopify_url !== 'string') {

@@ -214,6 +214,76 @@ const imageSets = {
       'https://images.unsplash.com/photo-1503602642458-232111445657?w=900&q=80',
     ],
   },
+  Impulse: {
+    hero: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1556906781-9a412961c28c?w=900&q=80',
+      'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=900&q=80',
+      'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&q=80',
+      'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=900&q=80',
+      'https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=900&q=80',
+    ],
+  },
+  Motion: {
+    hero: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&q=80',
+      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&q=80',
+      'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&q=80',
+      'https://images.unsplash.com/photo-1503602642458-232111445657?w=900&q=80',
+      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&q=80',
+    ],
+  },
+  Seventh: {
+    hero: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1618220179428-22790b461013?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=900&q=80',
+      'https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=900&q=80',
+      'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1538688423619-a81d3f23454b?w=900&q=80',
+      'https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=900&q=80',
+      'https://images.unsplash.com/photo-1602872030490-4a484a7b3ba6?w=900&q=80',
+    ],
+  },
+  Sleek: {
+    hero: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=900&q=80',
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&q=80',
+      'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=900&q=80',
+      'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=80',
+      'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=900&q=80',
+    ],
+  },
+  Glint: {
+    hero: 'https://images.unsplash.com/photo-1618220179428-22790b461013?w=1600&q=80',
+    story: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=1200&q=80',
+    editorial: [
+      'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=900&q=80',
+      'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=900&q=80',
+      'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=900&q=80',
+    ],
+    products: [
+      'https://images.unsplash.com/photo-1540932239986-30128078f3c5?w=900&q=80',
+      'https://images.unsplash.com/photo-1602872030490-4a484a7b3ba6?w=900&q=80',
+      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&q=80',
+    ],
+  },
 };
 
 const profiles = {
@@ -569,6 +639,166 @@ const profiles = {
     newsletter: 'Get first access to color drops',
     footerNote: 'Premium playful commerce for colorful fashion, gifts, and lifestyle goods.',
   },
+  Impulse: {
+    brand: 'Impulse Supply',
+    eyebrow: 'Proven premium commerce for high-volume apparel',
+    headline: 'A launch-ready store built for fast catalog movement.',
+    subhead:
+      'Impulse Supply turns apparel, footwear, and campaign drops into a confident storefront with direct merchandising, quick-buy paths, and clear product education.',
+    cta: 'Shop the proven edit',
+    announcement: 'Impulse event live: quick-buy bundles, stock counters, and collection filters are ready.',
+    nav: ['Launches', 'Apparel', 'Footwear', 'Fit'],
+    products: [
+      ['Sprint Mesh Trainer', '$210', 'A fast-selling trainer with layered mesh, sculpted sole, and drop-day colorways.'],
+      ['Utility Track Shell', '$184', 'A lightweight layer with reflective detail, clean pockets, and all-season movement.'],
+      ['Studio Cargo Sling', '$98', 'A compact carry piece shaped for daily routes and quick product pairing.'],
+    ],
+    collections: ['Drop essentials', 'Performance layers', 'Urban carry', 'Best-reviewed edit'],
+    features: [
+      ['Proven conversion stack', 'Quick buy, sticky cart, and product badges keep large catalogs moving.'],
+      ['Filter-heavy discovery', 'Swatches, size filters, and sort controls make browsing feel controlled at scale.'],
+      ['Campaign-ready modules', 'Promo tiles, hero drops, and countdown sections support repeat launches.'],
+      ['Trust before checkout', 'Product tabs, delivery cues, and fit detail reduce hesitation on apparel buys.'],
+    ],
+    testimonials: [
+      ['Rafa M.', 'It feels like a proven Shopify demo translated into something we can actually brand.'],
+      ['Northcut Apparel', 'The product grid has speed, but the page still feels premium.'],
+      ['Ari V.', 'Filters, quick view, and bundles all feel close without crowding the layout.'],
+    ],
+    storyTitle: 'A commercial blueprint for the most proven tier',
+    story:
+      'The Impulse-inspired storefront emphasizes reliable buying paths, product-card density, and polished launch sections. It is built for brands that need premium presentation and operational clarity at the same time.',
+    newsletter: 'Get the next launch brief',
+    footerNote: 'Feature-complete commerce language for apparel, footwear, and versatile catalogs.',
+  },
+  Motion: {
+    brand: 'Motion Reel',
+    eyebrow: 'Video-led ecommerce with controlled energy',
+    headline: 'Make every scroll feel like a product trailer.',
+    subhead:
+      'Motion Reel is shaped for brands that sell through movement: animated sections, bold visuals, and product cards that stay fast on mobile.',
+    cta: 'Play the collection',
+    announcement: 'Motion preview: animated lookbook, video-ready product modules, and launch timers.',
+    nav: ['Reels', 'Drops', 'Gear', 'Journal'],
+    products: [
+      ['Frame Studio Lamp', '$188', 'A graphic table lamp made for moving sets, content rooms, and visual retail.'],
+      ['Loop Carry Kit', '$96', 'A compact accessory system with color-coded pieces and launch-ready packaging.'],
+      ['Signal Audio Set', '$142', 'A giftable audio edit with clean controls and kinetic product storytelling.'],
+    ],
+    collections: ['Video hero', 'Animated drops', 'Creator kits', 'Story-driven gifts'],
+    features: [
+      ['Motion-first rhythm', 'Parallax, rollover cards, and before-after interaction give the page energy.'],
+      ['Media-rich structure', 'Hero, lookbook, and editorial sections are tuned for imagery and video replacement.'],
+      ['Fast mobile scanning', 'Large visual blocks collapse into direct product cards without losing drama.'],
+      ['Promo timing', 'Countdowns and announcement states help campaign-driven brands create urgency.'],
+    ],
+    testimonials: [
+      ['Mira K.', 'The page feels alive without becoming noisy.'],
+      ['Frame & Fold', 'It finally gives our moving content a store structure around it.'],
+      ['Jon Bell', 'The product cards remain clear even with the animated feel.'],
+    ],
+    storyTitle: 'Animation as merchandising, not decoration',
+    story:
+      'The Motion-inspired build uses video-ready spaces, scroll movement, and visual rhythm to make a static page feel cinematic. It keeps conversion tools visible so the motion supports shopping instead of distracting from it.',
+    newsletter: 'Receive the motion drop',
+    footerNote: 'Animated ecommerce patterns for content-led brands, gifts, and visual catalogs.',
+  },
+  Seventh: {
+    brand: 'Seventh House',
+    eyebrow: 'Clean modern storefronts for considered goods',
+    headline: 'Quiet structure for products that need space.',
+    subhead:
+      'Seventh House presents home objects, soft goods, and minimalist accessories through clear navigation, balanced grids, and calm premium detail.',
+    cta: 'Enter the clean edit',
+    announcement: 'Seventh edit: modern essentials, polished filters, and a calm cart flow.',
+    nav: ['Objects', 'Rooms', 'Materials', 'Care'],
+    products: [
+      ['Modular Side Lamp', '$260', 'A composed lighting piece with soft diffusion and architectural proportion.'],
+      ['Linen Storage Basket', '$112', 'A structured woven basket sized for shelves, textiles, and daily utility.'],
+      ['Stone Desk Tray', '$84', 'A minimal organizing object with weighted feel and quiet surface detail.'],
+    ],
+    collections: ['Clean objects', 'Room edits', 'Material stories', 'Modern utility'],
+    features: [
+      ['Balanced hierarchy', 'Measured type and open spacing make every section easy to scan.'],
+      ['Modern discovery', 'Collections, product cards, and filters stay clear for repeat browsing.'],
+      ['Low-friction cart', 'Slide-out cart and quick view keep the page grounded in commerce.'],
+      ['Editorial restraint', 'Story sections explain materials and use cases without overdesigning the page.'],
+    ],
+    testimonials: [
+      ['Nora T.', 'It is clean without feeling empty.'],
+      ['Plain Goods', 'Our product story feels premium and practical in the same breath.'],
+      ['C. Haye', 'Every section is calm, but the store still sells.'],
+    ],
+    storyTitle: 'A clean premium blueprint with enough commerce depth',
+    story:
+      'The Seventh-inspired storefront uses controlled spacing, soft contrast, and direct product structure. It suits brands that want modern polish without a loud visual system.',
+    newsletter: 'Join the seventh edit',
+    footerNote: 'Clean modern ecommerce for home, accessories, and considered everyday products.',
+  },
+  Sleek: {
+    brand: 'Sleek Atelier',
+    eyebrow: 'Best-value premium polish for modern fashion',
+    headline: 'Minimal fashion commerce with the expensive parts intact.',
+    subhead:
+      'Sleek Atelier turns an entry premium theme direction into a refined storefront with editorial imagery, quick-buy tools, and restrained product storytelling.',
+    cta: 'Shop the sleek edit',
+    announcement: 'Sleek value build: luxury pacing, mobile-first product cards, and complete cart UX.',
+    nav: ['New', 'Tailoring', 'Accessories', 'Studio'],
+    products: [
+      ['Contour Drape Shirt', '$178', 'A clean fluid shirt with soft structure and quiet evening polish.'],
+      ['Arc Handle Bag', '$245', 'A compact sculptural bag with smooth lines and understated hardware.'],
+      ['Line Wrap Coat', '$360', 'A minimal outer layer with long proportions and seasonless texture.'],
+    ],
+    collections: ['Modern tailoring', 'Soft accessories', 'Capsule layers', 'Value luxury'],
+    features: [
+      ['Premium on a budget', 'The page keeps expensive-feeling spacing and interaction without unnecessary complexity.'],
+      ['Minimal product focus', 'Cards are direct, image-led, and supported by practical copy.'],
+      ['Complete theme basics', 'Cart drawer, promo popup, product badges, quick view, and mobile menu are all included.'],
+      ['Editorial softness', 'Lookbook and story sections create brand depth without slowing the shopping path.'],
+    ],
+    testimonials: [
+      ['Selene R.', 'It feels far above the price tier it comes from.'],
+      ['Atelier North', 'The layout gives our capsule collection a much more premium read.'],
+      ['M. Sloan', 'Clean, fast, and polished enough for a serious launch.'],
+    ],
+    storyTitle: 'Best-value structure with luxury restraint',
+    story:
+      'The Sleek-inspired site proves the lower end of the premium range can still feel refined. Its strength is a tight balance of minimal design, complete commerce features, and mobile-first clarity.',
+    newsletter: 'Get the capsule preview',
+    footerNote: 'Best-value premium commerce for modern fashion and accessory brands.',
+  },
+  Glint: {
+    brand: 'Glint Market',
+    eyebrow: 'Bright polished commerce for gifts and beauty',
+    headline: 'Small products, big premium signal.',
+    subhead:
+      'Glint Market frames giftable objects, beauty sets, and polished accessories with bright surfaces, crisp cards, and a confident checkout path.',
+    cta: 'Open the glint edit',
+    announcement: 'Glint launch: gift bundles, swatch filters, and polished quick-buy cards.',
+    nav: ['Gifts', 'Beauty', 'Objects', 'Bundles'],
+    products: [
+      ['Glow Vessel Set', '$118', 'A refined ceramic trio designed for gifting, display, and seasonal styling.'],
+      ['Pearl Ritual Kit', '$142', 'A bright beauty set with clear benefits and premium unboxing cues.'],
+      ['Chrome Catchall', '$76', 'A polished object for desks, vanities, and small-space merchandising.'],
+    ],
+    collections: ['Giftable glints', 'Beauty rituals', 'Bright objects', 'Bundle edits'],
+    features: [
+      ['High perceived value', 'Light surfaces, sharp cards, and restrained accents lift accessible products.'],
+      ['Gift-first merchandising', 'Bundles, badges, and collection rails support seasonal buying.'],
+      ['Quick discovery', 'Enhanced search, quick view, and swatches keep small catalogs fast.'],
+      ['Polished proof', 'Testimonials, press-like sections, and trust cues make the page feel launch-ready.'],
+    ],
+    testimonials: [
+      ['Gia M.', 'It makes affordable gifts feel carefully chosen and premium.'],
+      ['Little Bright Co.', 'The bundle flow is exactly what we needed for seasonal campaigns.'],
+      ['Theo R.', 'Bright, clean, and still conversion-focused.'],
+    ],
+    storyTitle: 'A bright best-value storefront with premium cues',
+    story:
+      'The Glint-inspired build uses bright product framing, clean hierarchy, and gift-led merchandising. It translates a value-tier premium theme into a polished static storefront.',
+    newsletter: 'Join the glint list',
+    footerNote: 'Bright premium commerce for gifts, beauty, and polished small goods.',
+  },
 };
 
 const dynamicImageSets = [
@@ -720,6 +950,9 @@ function moodKey(theme) {
   if (/reinvent/.test(name) || /beauty/.test(mood)) return 'beauty';
   if (/kettle/.test(name) || /culinary|food|table/.test(mood)) return 'culinary';
   if (/dune/.test(name)) return 'fashion';
+  if (/impulse|sleek/.test(name) || /fashion-commerce|value-rich/.test(mood)) return 'fashion';
+  if (/motion/.test(name) || /animated|video/.test(mood)) return 'playful';
+  if (/seventh|glint/.test(name) || /best-value|refined/.test(mood)) return 'luxury';
   if (/technical|conversion|electronics|hardware/.test(mood)) return 'technical';
   if (/fashion|street|bold/.test(mood)) return 'fashion';
   if (/organic|warm|lifestyle/.test(mood)) return 'organic';
@@ -786,6 +1019,7 @@ function renderIndex(theme) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111111'/%3E%3C/svg%3E">
   <title>${escapeHtml(profile.brand)} | ${escapeHtml(theme.mood)}</title>
   <meta name="description" content="${escapeHtml(profile.subhead)}">
   <link rel="stylesheet" href="./style.css">
@@ -1907,6 +2141,58 @@ h3 {
 .site-bubbly .feature-item:nth-child(odd) {
   background: color-mix(in srgb, var(--color-accent), white 78%);
   color: #111111;
+}
+
+.site-impulse .product-grid,
+.site-motion .product-grid {
+  gap: 0;
+}
+
+.site-impulse .product-card,
+.site-motion .product-card {
+  border-radius: 0;
+}
+
+.site-impulse .announcement-bar {
+  background: var(--color-primary);
+  color: var(--on-primary);
+}
+
+.site-motion .hero__media {
+  filter: saturate(1.2) contrast(1.08);
+}
+
+.site-motion .lookbook-grid {
+  transform: skewY(-1deg);
+}
+
+.site-motion .lookbook-frame {
+  transform: skewY(1deg);
+}
+
+.site-seventh .section-shell {
+  max-width: 1180px;
+}
+
+.site-seventh .product-card,
+.site-seventh .feature-item,
+.site-seventh .testimonial-card {
+  border-radius: 4px;
+}
+
+.site-sleek .hero__content,
+.site-glint .hero__content {
+  width: min(100%, 1040px);
+}
+
+.site-sleek .brand-symbol,
+.site-glint .brand-symbol {
+  border-radius: 8px;
+}
+
+.site-glint .newsletter,
+.site-glint .feature-item:nth-child(2) {
+  background: color-mix(in srgb, var(--color-accent), #ffffff 72%);
 }
 
 .site-voyage .story,

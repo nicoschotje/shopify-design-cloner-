@@ -67,7 +67,7 @@ Connect your GitHub account and select the `shopify-design-cloner` repo.
 
 ```
 shopify-design-cloner/
-├── design-analysis.json       ← 10 premium $500-$1000 Shopify presets, fully analyzed
+├── design-analysis.json       ← 10 premium $350-$500 Shopify blueprint presets, fully analyzed
 └── sites/
     ├── prestige/              ← example: one site per theme
     │   ├── index.html
@@ -80,7 +80,7 @@ shopify-design-cloner/
 ```
 
 Each `index.html` opens as a standalone polished website with the design language of one
-of Shopify's premium $500-$1000 theme presets.
+of Shopify's premium $350-$500 blueprint theme presets.
 
 ---
 

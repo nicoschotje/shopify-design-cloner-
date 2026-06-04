@@ -1,17 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --color-primary: #232323;
+  --color-primary: #1d1d1d;
   --color-secondary: #f4f4f4;
-  --color-accent: #5f7c65;
-  --color-text: #ffffff;
-  --color-bg: #000000;
-  --font-heading: "Instrument Sans", serif;
-  --font-body: "Instrument Sans", sans-serif;
-  --base-size: 14.04px;
-  --heading-weight: 700;
-  --surface: #111111;
-  --surface-muted: #171717;
+  --color-accent: #1d1d1d;
+  --color-text: #1d1d1d;
+  --color-bg: #ffffff;
+  --font-heading: "DM Sans", serif;
+  --font-body: "DM Sans", sans-serif;
+  --base-size: 18px;
+  --heading-weight: 200;
+  --surface: #ffffff;
+  --surface-muted: #f7f6f2;
   --on-primary: #ffffff;
   --on-accent: #ffffff;
   --line: color-mix(in srgb, var(--color-text), transparent 78%);
@@ -449,7 +449,7 @@ h3 {
   display: grid;
   gap: 2rem;
   background: var(--color-secondary);
-  color: #111111;
+  color: var(--color-text);
 }
 
 .story__image {
@@ -838,6 +838,58 @@ h3 {
 .site-bubbly .feature-item:nth-child(odd) {
   background: color-mix(in srgb, var(--color-accent), white 78%);
   color: #111111;
+}
+
+.site-impulse .product-grid,
+.site-motion .product-grid {
+  gap: 0;
+}
+
+.site-impulse .product-card,
+.site-motion .product-card {
+  border-radius: 0;
+}
+
+.site-impulse .announcement-bar {
+  background: var(--color-primary);
+  color: var(--on-primary);
+}
+
+.site-motion .hero__media {
+  filter: saturate(1.2) contrast(1.08);
+}
+
+.site-motion .lookbook-grid {
+  transform: skewY(-1deg);
+}
+
+.site-motion .lookbook-frame {
+  transform: skewY(1deg);
+}
+
+.site-seventh .section-shell {
+  max-width: 1180px;
+}
+
+.site-seventh .product-card,
+.site-seventh .feature-item,
+.site-seventh .testimonial-card {
+  border-radius: 4px;
+}
+
+.site-sleek .hero__content,
+.site-glint .hero__content {
+  width: min(100%, 1040px);
+}
+
+.site-sleek .brand-symbol,
+.site-glint .brand-symbol {
+  border-radius: 8px;
+}
+
+.site-glint .newsletter,
+.site-glint .feature-item:nth-child(2) {
+  background: color-mix(in srgb, var(--color-accent), #ffffff 72%);
 }
 
 .site-voyage .story,

@@ -1,7 +1,7 @@
 # AGENTS.md — Shopify Design Cloner
 
-This repo has ONE purpose: scrape the Shopify Theme Store for premium $500-$1000
-theme presets, extract their design DNA, and build standalone static websites inspired by those designs.
+This repo has ONE purpose: scrape a curated $350-$500 Shopify premium-theme blueprint set,
+extract each preset's design DNA, and build standalone static websites inspired by those designs.
 
 ---
 
@@ -66,8 +66,9 @@ npm run pipeline
 ## Constraints and rules — READ THESE CAREFULLY
 
 1. **Shopify Theme Store URL to scrape:** `https://themes.shopify.com`  
-   - Sort by price descending to find premium presets in the $500-$1000 tier.
-   - Target theme presets with a one-time purchase price of at least $500 and at most $1000.
+   - Default scraping targets the curated $350-$500 blueprint presets named in the research brief.
+   - Use `SCRAPE_MODE=price` only when intentionally switching back to sorted price discovery.
+   - Target theme presets with a one-time purchase price of at least $350 and at most $500.
    - Extract from each theme's detail page: name, price, preview URL, primary colors (from CSS or screenshots), fonts (Google Fonts or system fonts listed), layout sections (hero, feature grid, testimonials, etc.), and any notable UI patterns.
 
 2. **design-analysis.json schema** — each entry must have:
